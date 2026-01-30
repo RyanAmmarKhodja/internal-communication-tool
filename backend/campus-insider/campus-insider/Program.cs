@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using campus_insider.Data;
+using campus_insider.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ var app = builder.Build();
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<EquipmentService>();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

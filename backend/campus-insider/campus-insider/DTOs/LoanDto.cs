@@ -3,7 +3,7 @@
     public class LoanDto
     {
         public int Id { get; set; }
-        public EquipmentDto Equipment { get; set; }
+        public EquipmentResponseDto Equipment { get; set; }
         public UserDto Borrower { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
