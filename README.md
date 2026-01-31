@@ -47,4 +47,4 @@ UML diagrams are used to model entities, relationships, and business operations.
 ## Project Status
 
 Ongoing development  
-Upcoming features include notifications, messaging, authentication, and invoicing.
+Upcoming features include notifications, messaging, authentication.
