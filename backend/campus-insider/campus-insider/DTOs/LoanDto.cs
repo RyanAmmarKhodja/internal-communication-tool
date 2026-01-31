@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public EquipmentResponseDto Equipment { get; set; }
-        public UserDto Borrower { get; set; }
+        public UserResponseDto Borrower { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; }

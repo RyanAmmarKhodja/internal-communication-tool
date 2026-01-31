@@ -3,7 +3,7 @@
     public class NotificationDto
     {
         public int Id { get; set; }
-        public UserDto User { get; set; }
+        public UserResponseDto User { get; set; }
         public string Type { get; set; }
         public string Content { get; set; }
         public string IsRead { get; set; }

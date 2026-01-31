@@ -107,3 +107,8 @@ C:\Projects\campus-insider\backend\campus-insider\campus-insider\obj\Debug\net8.
 C:\Projects\campus-insider\backend\campus-insider\campus-insider\obj\Debug\net8.0\campus-insider.pdb
 C:\Projects\campus-insider\backend\campus-insider\campus-insider\obj\Debug\net8.0\campus-insider.genruntimeconfig.cache
 C:\Projects\campus-insider\backend\campus-insider\campus-insider\obj\Debug\net8.0\ref\campus-insider.dll
+C:\Projects\campus-insider\backend\campus-insider\campus-insider\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Projects\campus-insider\backend\campus-insider\campus-insider\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Projects\campus-insider\backend\campus-insider\campus-insider\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Projects\campus-insider\backend\campus-insider\campus-insider\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Projects\campus-insider\backend\campus-insider\campus-insider\obj\Debug\net8.0\campus-insider.MvcApplicationPartsAssemblyInfo.cs

@@ -69,7 +69,7 @@
             // =========================================================
             // Carpool Trips
             // =========================================================
-            modelBuilder.Entity<CarpoolTrip >(entity =>
+            modelBuilder.Entity<CarpoolTrip>(entity =>
             {
                 entity.ToTable("carpool_trips");
 
@@ -107,11 +107,15 @@
             // =========================================================
             // Equipment
             // =========================================================
-            modelBuilder.Entity<Equipment >(entity =>
+            modelBuilder.Entity<Equipment>(entity =>
             {
                 entity.ToTable("equipment");
 
                 entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                      .HasColumnName("id")
+                      .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                       .HasColumnName("name")
@@ -130,6 +134,10 @@
                 entity.Property(e => e.CreatedAt)
                       .HasColumnName("created_at")
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.OwnerId)
+                      .HasColumnName("owner_id")
+                      .IsRequired();
 
                 entity.HasOne(e => e.Owner)
                       .WithMany(u => u.Equipment)
@@ -181,7 +189,7 @@
             // =========================================================
             // Notifications
             // =========================================================
-            modelBuilder.Entity<Notification >(entity =>
+            modelBuilder.Entity<Notification>(entity =>
             {
                 entity.ToTable("notifications");
 

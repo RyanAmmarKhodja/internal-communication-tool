@@ -36,6 +36,7 @@ namespace campus_insider.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult<EquipmentResponseDto>> GetById(long id)
         {
             var equipment = await _equipmentService.GetByIdAsync(id);
@@ -59,7 +60,7 @@ namespace campus_insider.Controllers
         public async Task<ActionResult<EquipmentResponseDto>> Create(
        [FromBody] EquipmentCreateDto dto)
         {
-            // ⚠ normally OwnerId comes from auth (JWT)
+            //  normally OwnerId comes from auth (JWT)
             var equipment = new Equipment
             {
                 Name = dto.Name,
