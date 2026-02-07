@@ -7,7 +7,6 @@ using System.Security.Claims;
 
 namespace campus_insider.Controllers
 {
-
     [ApiController]
     [Authorize]
     [Route("api/loans")]
@@ -26,169 +25,218 @@ namespace campus_insider.Controllers
             return long.TryParse(userIdString, out long userId) ? userId : 0;
         }
 
-        // BASIC CRUD
+        #region --- ADMIN/PUBLIC QUERIES ---
 
+        // GET /api/loans?pageNumber=1&pageSize=20
         [HttpGet]
-        public async Task<ActionResult<List<LoanDto>>> GetAll()
+        public async Task<ActionResult<PagedResult<LoanDto>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
         {
-            return Ok(await _loanService.GetAllLoans());
+            var result = await _loanService.GetAllLoans(pageNumber, pageSize);
+            return Ok(result);
         }
 
+        // GET /api/loans/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<LoanDto>> GetById(int id)
+        public async Task<ActionResult<LoanDto>> GetById(long id)
         {
             var loan = await _loanService.GetLoanById(id);
-            if (loan == null) return NotFound();
+            if (loan == null) return NotFound(new { message = "Loan not found." });
             return Ok(loan);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        // GET /api/loans/status/pending?pageNumber=1&pageSize=20
+        [HttpGet("status/{status}")]
+        public async Task<ActionResult<PagedResult<LoanDto>>> GetByStatus(
+            string status,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
         {
-            var result = await _loanService.DeleteLoan(id);
-            if (!result) return NotFound();
-            return NoContent();
+            var result = await _loanService.GetLoansByStatus(status, pageNumber, pageSize);
+            return Ok(result);
         }
 
-        // GENERAL ACTIONS
+        #endregion
 
-        [HttpGet("pending")]
-        public async Task<ActionResult<List<LoanDto>>> GetPending(string status)
-        {
-            return Ok(await _loanService.GetLoansByStatus(status));
-        }
+        #region --- BORROWER ACTIONS ---
 
-        [HttpGet("ongoing")]
-        public async Task<ActionResult<List<LoanDto>>> GetOngoing()
-        {
-            return Ok(await _loanService.GetOngoingLoans());
-        }
-
-
-
-
-        // ALL USERS ACTIONS
+        // POST /api/loans/request
         [HttpPost("request")]
-        public async Task<IActionResult> RequestLoan([FromBody] LoanDto request)
+        public async Task<IActionResult> RequestLoan([FromBody] LoanRequestDto request)
         {
             var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
-            var loan = new LoanDto
+            var loanDto = new LoanDto
             {
                 BorrowerId = userId,
                 EquipmentId = request.EquipmentId,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate
             };
-            await _loanService.RequestLoan(loan);
-            return StatusCode(201);
+
+            var result = await _loanService.RequestLoan(loanDto);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return StatusCode(201, new { message = "Loan requested successfully." });
         }
 
+        // PATCH /api/loans/5/cancel
         [HttpPatch("{id}/cancel")]
         public async Task<IActionResult> Cancel(long id)
         {
             var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
+
             var loan = await _loanService.GetLoanById(id);
-            if (loan.BorrowerId!=userId) return Forbid();
-            await _loanService.CancelLoan(id);
-            return Ok();
+            if (loan == null) return NotFound(new { message = "Loan not found." });
+            if (loan.BorrowerId != userId) return Forbid();
+
+            var result = await _loanService.CancelLoan(id, userId);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Loan cancelled successfully." });
         }
 
+        // PATCH /api/loans/5/extend
         [HttpPatch("{id}/extend")]
-        public async Task<IActionResult> Extend(int id, [FromBody] DateTime newEndDate)
+        public async Task<IActionResult> Extend(long id, [FromBody] ExtendLoanDto extendDto)
         {
-            var success = await _loanService.ExtendLoan(id, newEndDate);
-            if (!success) return BadRequest("Extension unavailable or loan not eligible.");
-            return Ok();
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
+
+            var loan = await _loanService.GetLoanById(id);
+            if (loan == null) return NotFound(new { message = "Loan not found." });
+            if (loan.BorrowerId != userId) return Forbid();
+
+            var result = await _loanService.ExtendLoan(id, extendDto.NewEndDate);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Extension requested successfully." });
         }
 
+        // PATCH /api/loans/5/complete
         [HttpPatch("{id}/complete")]
         public async Task<IActionResult> Complete(long id)
         {
-            var userId = GetCurrentUserId(); 
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
+
             var loan = await _loanService.GetLoanById(id);
+            if (loan == null) return NotFound(new { message = "Loan not found." });
             if (loan.BorrowerId != userId) return Forbid();
 
-            await _loanService.CompleteLoan(id);
-            return Ok();
+            var result = await _loanService.CompleteLoan(id);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Loan completed successfully." });
         }
-        
-        [HttpGet("/user/loans")]
-        public async Task<ActionResult<List<LoanDto>>> GetAllUserLoans()
+
+        // GET /api/loans/my-loans?status=APPROVED&pageNumber=1&pageSize=20
+        [HttpGet("my-loans")]
+        public async Task<ActionResult<PagedResult<LoanDto>>> GetMyLoans(
+            [FromQuery] string? status = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
         {
             var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetAllUserLoans(userId));
+            if (userId == 0) return Unauthorized();
+
+            var result = await _loanService.GetUserLoans(userId, status, pageNumber, pageSize);
+            return Ok(result);
         }
 
-        // USER ACTIONS
-        [HttpGet("/equipment/{equipmentId}")]
-        public async Task<ActionResult<List<LoanDto>>> GetLoansByEquipment(long equipmentId)
+        // GET /api/loans/my-loans/overdue
+        [HttpGet("my-loans/overdue")]
+        public async Task<ActionResult<List<LoanDto>>> GetMyOverdueLoans()
         {
             var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetLoansByEquipment(equipmentId));
+            if (userId == 0) return Unauthorized();
+
+            var result = await _loanService.GetUserOverdueLoans(userId);
+            return Ok(result);
         }
 
-        [HttpGet("/user/loans/{status}")]
-        public async Task<ActionResult<List<LoanDto>>> GetUserLoansByStatus(string status)
-        {
-            var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetUserLoansByStatus(userId, status));
-        }
+        #endregion
 
-        [HttpGet("/user/loans/overdue")]
-        public async Task<ActionResult<List<LoanDto>>> GetUserOverdueLoans()
-        {
-            var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetUserOverdueLoans(userId));
-        }
+        #region --- EQUIPMENT OWNER ACTIONS ---
 
-
-        // OWNER ACTIONS
+        // PATCH /api/loans/5/approve
         [HttpPatch("{id}/approve")]
         public async Task<IActionResult> Approve(long id)
         {
-            var UserIdString = long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out long userId);
-            var isOwner = await _loanService.IsEquipmentOwner(id, userId);
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
+            var isOwner = await _loanService.IsEquipmentOwner(id, userId);
             if (!isOwner) return Forbid();
 
-            await _loanService.ApproveLoan(id);
-            return Ok();
+            var result = await _loanService.ApproveLoan(id);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Loan approved successfully." });
         }
 
+        // PATCH /api/loans/5/reject
         [HttpPatch("{id}/reject")]
         public async Task<IActionResult> Reject(long id)
         {
-            var UserIdString = long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out long userId);
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
+
             var isOwner = await _loanService.IsEquipmentOwner(id, userId);
             if (!isOwner) return Forbid();
 
-            await _loanService.RejectLoan(id);
-            return Ok();
+            var result = await _loanService.RejectLoan(id);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Loan rejected successfully." });
         }
 
-        [HttpGet("/owner/overdue")]
-        public async Task<ActionResult<List<LoanDto>>> GetOverdueLoans()
+        // PATCH /api/loans/5/approve-extension
+        [HttpPatch("{id}/approve-extension")]
+        public async Task<IActionResult> ApproveExtension(long id)
         {
             var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetOwnerOverdueLoans(userId));
+            if (userId == 0) return Unauthorized();
 
+            var isOwner = await _loanService.IsEquipmentOwner(id, userId);
+            if (!isOwner) return Forbid();
+
+            var result = await _loanService.ApproveExtension(id);
+            if (!result.Success) return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Extension approved successfully." });
         }
 
-        [HttpGet("/owner/ongoing")]
-        public async Task<ActionResult<List<LoanDto>>> GetOngoingLoans()
+        // GET /api/loans/my-equipment-loans?status=PENDING
+        [HttpGet("my-equipment-loans")]
+        public async Task<ActionResult<PagedResult<LoanDto>>> GetMyEquipmentLoans(
+            [FromQuery] string? status = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
         {
             var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetOwnerOngoingLoans(userId));
+            if (userId == 0) return Unauthorized();
 
+            var result = await _loanService.GetOwnerLoans(userId, status, pageNumber, pageSize);
+            return Ok(result);
         }
-
-        [HttpGet("/owner/{status}")]
-        public async Task<ActionResult<List<LoanDto>>> GetOngoingLoans(string status)
-        {
-            var userId = GetCurrentUserId();
-            return Ok(await _loanService.GetOwnerLoansByStatus(userId, status));
-
-        }
+        #endregion
     }
+
+    #region --- DTOs for Request Bodies ---
+
+    public class LoanRequestDto
+    {
+        public long EquipmentId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    public class ExtendLoanDto
+    {
+        public DateTime NewEndDate { get; set; }
+    }
+
+    #endregion
 }

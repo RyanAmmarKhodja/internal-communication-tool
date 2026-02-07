@@ -6,11 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace campus_insider.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -23,32 +22,33 @@ namespace campus_insider.Controllers
             _userService = userService;
         }
 
+        // POST /api/auth/login
         [EnableRateLimiting("login-policy")]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
-            if (!login.Email.EndsWith("@lycee-rene-cassin.fr")) 
-            {
-                return BadRequest("Only school emails are permitted.");
-            }
+            // Validation 1: School email domain
+            if (!login.Email.EndsWith("@lycee-rene-cassin.fr"))
+                return BadRequest(new { message = "Only school emails (@lycee-rene-cassin.fr) are permitted." });
 
-            var user = await _userService.GetByLogin(login);
+            // Validation 2: Authenticate user
+            var result = await _userService.ValidateLoginAsync(login);
+            if (!result.Success)
+                return Unauthorized(new { message = result.ErrorMessage });
 
-            
-            // 2. Simple string comparison (WARNING: Temporary only!)
-            if (user == null || user.Password != login.Password)
-            {
-                return Unauthorized("Invalid email or password.");
-            }
+            var user = result.Data!;
 
-            // 3. Create the "Claims" (The user's identity data)
+            // Create JWT claims
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // This is the 'userId'
-                new Claim(ClaimTypes.Email, user.Email),                  // This is the 'email'
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.GivenName, user.FirstName),
+                new Claim(ClaimTypes.Surname, user.LastName)
             };
 
-            // 4. Create the Token
+            // Generate token
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -56,15 +56,46 @@ namespace campus_insider.Controllers
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds
             );
 
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token)
-            });
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
+            return Ok(new AuthResponseDto
+            {
+                Token = tokenString,
+                ExpiresAt = token.ValidTo,
+                User = new UserResponseDto
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Role = user.Role,
+                    CreatedAt = user.CreatedAt
+                }
+            });
+        }
+
+        // POST /api/auth/refresh (Optional but recommended)
+        [HttpPost("refresh")]
+        public IActionResult RefreshToken()
+        {
+            // TODO: Implement refresh token logic if needed
+            // This would use a separate refresh token stored in DB
+            return Ok(new { message = "Refresh token endpoint - to be implemented" });
         }
     }
+
+    #region --- DTOs ---
+
+    public class AuthResponseDto
+    {
+        public string Token { get; set; } = string.Empty;
+        public DateTime ExpiresAt { get; set; }
+        public UserResponseDto User { get; set; } = null!;
+    }
+
+    #endregion
 }

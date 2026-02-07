@@ -235,10 +235,30 @@
         }
       }
     },
-    "/api/Loans": {
+    "/api/loans": {
       "get": {
         "tags": [
           "Loans"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -246,26 +266,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoanDto"
-                  }
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoanDto"
-                  }
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoanDto"
-                  }
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
                 }
               }
             }
@@ -273,7 +284,7 @@
         }
       }
     },
-    "/api/Loans/{id}": {
+    "/api/loans/{id}": {
       "get": {
         "tags": [
           "Loans"
@@ -285,7 +296,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
@@ -311,30 +322,66 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/loans/status/{status}": {
+      "get": {
         "tags": [
           "Loans"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "status",
             "in": "path",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/Loans/request": {
+    "/api/loans/request": {
       "post": {
         "tags": [
           "Loans"
@@ -343,17 +390,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoanDto"
+                "$ref": "#/components/schemas/LoanRequestDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoanDto"
+                "$ref": "#/components/schemas/LoanRequestDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LoanDto"
+                "$ref": "#/components/schemas/LoanRequestDto"
               }
             }
           }
@@ -365,7 +412,7 @@
         }
       }
     },
-    "/api/Loans/{id}/approve": {
+    "/api/loans/{id}/cancel": {
       "patch": {
         "tags": [
           "Loans"
@@ -377,7 +424,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
@@ -388,7 +435,7 @@
         }
       }
     },
-    "/api/Loans/{id}/reject": {
+    "/api/loans/{id}/extend": {
       "patch": {
         "tags": [
           "Loans"
@@ -400,53 +447,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Loans/{id}/cancel": {
-      "patch": {
-        "tags": [
-          "Loans"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Loans/{id}/extend": {
-      "patch": {
-        "tags": [
-          "Loans"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
@@ -454,20 +455,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "string",
-                "format": "date-time"
+                "$ref": "#/components/schemas/ExtendLoanDto"
               }
             },
             "text/json": {
               "schema": {
-                "type": "string",
-                "format": "date-time"
+                "$ref": "#/components/schemas/ExtendLoanDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "string",
-                "format": "date-time"
+                "$ref": "#/components/schemas/ExtendLoanDto"
               }
             }
           }
@@ -479,7 +477,7 @@
         }
       }
     },
-    "/api/Loans/{id}/complete": {
+    "/api/loans/{id}/complete": {
       "patch": {
         "tags": [
           "Loans"
@@ -491,7 +489,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
             }
           }
         ],
@@ -502,7 +500,63 @@
         }
       }
     },
-    "/api/Loans/pending": {
+    "/api/loans/my-loans": {
+      "get": {
+        "tags": [
+          "Loans"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/loans/my-loans/overdue": {
       "get": {
         "tags": [
           "Loans"
@@ -540,40 +594,71 @@
         }
       }
     },
-    "/api/Loans/ongoing": {
-      "get": {
+    "/api/loans/{id}/approve": {
+      "patch": {
         "tags": [
           "Loans"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoanDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoanDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LoanDto"
-                  }
-                }
-              }
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/loans/{id}/reject": {
+      "patch": {
+        "tags": [
+          "Loans"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/loans/{id}/approve-extension": {
+      "patch": {
+        "tags": [
+          "Loans"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -825,6 +910,16 @@
         },
         "additionalProperties": false
       },
+      "ExtendLoanDto": {
+        "type": "object",
+        "properties": {
+          "newEndDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "LoanDto": {
         "type": "object",
         "properties": {
@@ -848,11 +943,76 @@
             "type": "string",
             "format": "date-time"
           },
+          "requestedEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "returnedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "status": {
             "type": "string",
             "nullable": true
           },
           "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoanDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hasPrevious": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasNext": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanRequestDto": {
+        "type": "object",
+        "properties": {
+          "equipmentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
             "type": "string",
             "format": "date-time"
           }

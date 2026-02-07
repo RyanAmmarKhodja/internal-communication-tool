@@ -1,15 +1,14 @@
 ﻿using campus_insider.DTOs;
-using campus_insider.Models;
 using campus_insider.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 
 namespace campus_insider.Controllers
 {
     [ApiController]
-    [Route("api/user")]
-    public class UserController : Controller
+    [Route("api/users")]
+    public class UserController : ControllerBase
     {
         private readonly UserService _userService;
 
@@ -18,8 +17,31 @@ namespace campus_insider.Controllers
             _userService = userService;
         }
 
+        private long GetCurrentUserId()
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return long.TryParse(userIdString, out long userId) ? userId : 0;
+        }
 
+        #region --- Public Endpoints ---
 
+        // POST /api/users/register
+        [HttpPost("register")]
+        public async Task<ActionResult<UserResponseDto>> Register([FromBody] UserCreateDto dto)
+        {
+            var result = await _userService.RegisterAsync(dto);
+
+            if (!result.Success)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return CreatedAtAction(nameof(GetUserById), new { id = result.Data!.Id }, result.Data);
+        }
+
+        #endregion
+
+        #region --- Authorized Endpoints ---
+
+        // GET /api/users/5
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserResponseDto>> GetUserById(long id)
@@ -27,96 +49,51 @@ namespace campus_insider.Controllers
             var user = await _userService.GetByIdAsync(id);
 
             if (user == null)
-                return NotFound();
+                return NotFound(new { message = "User not found." });
 
-            return Ok(new UserResponseDto
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Role = user.Role,
-                CreatedAt = user.CreatedAt
-            });
+            return Ok(user);
         }
 
-
+        // GET /api/users
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<UserResponseDto>>> GetUsers()
         {
             var users = await _userService.GetAllAsync();
-            var result = users.Select(e => new UserResponseDto
-            {
-                Id = e.Id,
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Email = e.Email,
-                Role = e.Role,
-                CreatedAt = e.CreatedAt
-            }).ToList();
-            return Ok(result);
+            return Ok(users);
         }
 
-
-        [HttpPost]
-        public async Task<ActionResult<UserResponseDto>> Create(
-       [FromBody] UserCreateDto userDto)
-        {
-            if (!userDto.Email.EndsWith("@lycee-rene-cassin.fr")) // Ensure you include the .fr or .com
-            {
-                return BadRequest("Only school emails are permitted.");
-            }
-
-            var user = new User
-            {
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Password = userDto.Password,
-                Email = userDto.Email
-            };
-
-            var created = await _userService.CreateAsync(user);
-
-            return CreatedAtAction(nameof(GetUserById), new { id = created.Id },
-                new UserResponseDto
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Role = user.Role,
-                    CreatedAt = user.CreatedAt
-                });
-        }
-
-
-
+        // GET /api/users/me
         [Authorize]
-        [HttpPut]
-        public async Task<ActionResult<UserUpdateDto>> Update([FromBody] UserUpdateDto userDto)
+        [HttpGet("me")]
+        public async Task<ActionResult<UserResponseDto>> GetCurrentUser()
         {
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
-            try
-            {
-                var user = new User
-                {
-                    Id = userDto.Id,
-                    FirstName = userDto.FirstName,
-                    LastName = userDto.LastName,
-                    Password = userDto.Password,
-                    Email = userDto.Email
-                };
+            var user = await _userService.GetByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found." });
 
-
-                await _userService.UpdateAsync(user);
-
-                return Ok(true);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(user);
         }
 
+        // PUT /api/users/me
+        [Authorize]
+        [HttpPut("me")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UserUpdateDto dto)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
+
+            var result = await _userService.UpdateAsync(userId, dto);
+
+            if (!result.Success)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Profile updated successfully." });
+        }
+
+        #endregion
     }
 }

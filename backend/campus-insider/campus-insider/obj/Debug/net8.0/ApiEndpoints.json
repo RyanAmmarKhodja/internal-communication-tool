@@ -132,14 +132,25 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "GetAll",
-    "RelativePath": "api/Loans",
+    "RelativePath": "api/loans",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[campus_insider.DTOs.LoanDto, campus-insider, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "campus_insider.Services.PagedResult\u00601[[campus_insider.DTOs.LoanDto, campus-insider, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -152,14 +163,14 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "GetById",
-    "RelativePath": "api/Loans/{id}",
+    "RelativePath": "api/loans/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -177,15 +188,15 @@
   },
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
-    "Method": "Delete",
-    "RelativePath": "api/Loans/{id}",
-    "HttpMethod": "DELETE",
+    "Method": "Approve",
+    "RelativePath": "api/loans/{id}/approve",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -193,15 +204,15 @@
   },
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
-    "Method": "Approve",
-    "RelativePath": "api/Loans/{id}/approve",
+    "Method": "ApproveExtension",
+    "RelativePath": "api/loans/{id}/approve-extension",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -210,14 +221,14 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "Cancel",
-    "RelativePath": "api/Loans/{id}/cancel",
+    "RelativePath": "api/loans/{id}/cancel",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -226,14 +237,14 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "Complete",
-    "RelativePath": "api/Loans/{id}/complete",
+    "RelativePath": "api/loans/{id}/complete",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -242,19 +253,19 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "Extend",
-    "RelativePath": "api/Loans/{id}/extend",
+    "RelativePath": "api/loans/{id}/extend",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "newEndDate",
-        "Type": "System.DateTime",
+        "Name": "extendDto",
+        "Type": "campus_insider.Controllers.ExtendLoanDto",
         "IsRequired": true
       }
     ],
@@ -263,14 +274,14 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "Reject",
-    "RelativePath": "api/Loans/{id}/reject",
+    "RelativePath": "api/loans/{id}/reject",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -278,15 +289,31 @@
   },
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
-    "Method": "GetOngoing",
-    "RelativePath": "api/Loans/ongoing",
+    "Method": "GetMyLoans",
+    "RelativePath": "api/loans/my-loans",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[campus_insider.DTOs.LoanDto, campus-insider, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "campus_insider.Services.PagedResult\u00601[[campus_insider.DTOs.LoanDto, campus-insider, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -298,8 +325,8 @@
   },
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
-    "Method": "GetPending",
-    "RelativePath": "api/Loans/pending",
+    "Method": "GetMyOverdueLoans",
+    "RelativePath": "api/loans/my-loans/overdue",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -319,18 +346,54 @@
   {
     "ContainingType": "campus_insider.Controllers.LoansController",
     "Method": "RequestLoan",
-    "RelativePath": "api/Loans/request",
+    "RelativePath": "api/loans/request",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "campus_insider.DTOs.LoanDto",
+        "Type": "campus_insider.Controllers.LoanRequestDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "campus_insider.Controllers.LoansController",
+    "Method": "GetByStatus",
+    "RelativePath": "api/loans/status/{status}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "campus_insider.Services.PagedResult\u00601[[campus_insider.DTOs.LoanDto, campus-insider, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "campus_insider.Controllers.UserController",
