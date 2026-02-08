@@ -1,12 +1,7 @@
-﻿using campus_insider.Data;
-using campus_insider.DTOs;
-using campus_insider.Models;
+﻿using campus_insider.DTOs;
 using campus_insider.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 
 namespace campus_insider.Controllers
@@ -17,125 +12,126 @@ namespace campus_insider.Controllers
     public class EquipmentController : ControllerBase
     {
         private readonly EquipmentService _equipmentService;
+
         public EquipmentController(EquipmentService equipmentService)
         {
             _equipmentService = equipmentService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<EquipmentResponseDto>>> GetEquipment()
+        private long GetCurrentUserId()
         {
-            var equipment = await _equipmentService.GetAllEquipment();
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return long.TryParse(userIdString, out long userId) ? userId : 0;
+        }
 
-            var result = equipment.Select(e=> new EquipmentResponseDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description,
-                Category = e.Category,
-                OwnerId = e.OwnerId,
-                CreatedAt = e.CreatedAt
-            }).ToList();
+        #region --- Public Queries ---
 
+        // GET /api/equipment?pageNumber=1&pageSize=20
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<EquipmentResponseDto>>> GetEquipment(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var result = await _equipmentService.GetAllEquipment(pageNumber, pageSize);
             return Ok(result);
         }
 
+        // GET /api/equipment/search?searchTerm=laptop&category=electronics&pageNumber=1
+        [HttpGet("search")]
+        public async Task<ActionResult<PagedResult<EquipmentResponseDto>>> SearchEquipment(
+            [FromQuery] string? searchTerm = null,
+            [FromQuery] string? category = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var result = await _equipmentService.SearchEquipment(searchTerm, category, pageNumber, pageSize);
+            return Ok(result);
+        }
+
+        // GET /api/equipment/5
         [HttpGet("{id}")]
         public async Task<ActionResult<EquipmentResponseDto>> GetById(long id)
         {
             var equipment = await _equipmentService.GetByIdAsync(id);
-
             if (equipment == null)
-                return NotFound();
+                return NotFound(new { message = "Equipment not found." });
 
-            return Ok(new EquipmentResponseDto
-            {
-                Id = equipment.Id,
-                Name = equipment.Name,
-                Category = equipment.Category,
-                Description = equipment.Description,
-                OwnerId = equipment.OwnerId,
-                CreatedAt = equipment.CreatedAt
-            });
+            return Ok(equipment);
         }
 
+        // GET /api/equipment/my-equipment?pageNumber=1&pageSize=20
+        [HttpGet("my-equipment")]
+        public async Task<ActionResult<PagedResult<EquipmentResponseDto>>> GetMyEquipment(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
+            var result = await _equipmentService.GetEquipmentByOwner(userId, pageNumber, pageSize);
+            return Ok(result);
+        }
+
+        #endregion
+
+        #region --- Owner Actions ---
+
+        // POST /api/equipment
         [HttpPost]
-        public async Task<ActionResult<EquipmentResponseDto>> Create(
-       [FromBody] EquipmentCreateDto dto)
+        public async Task<ActionResult<EquipmentResponseDto>> Create([FromBody] EquipmentCreateDto dto)
         {
-            var OwnerIdString = long.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out long ownerId);
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
+            var result = await _equipmentService.ShareEquipment(dto, userId);
+            if (!result.Success)
+                return BadRequest(new { message = result.ErrorMessage });
 
-            var equipment = new Equipment
-            {
-                Name = dto.Name,
-                Category = dto.Category,
-                Description = dto.Description,
-                OwnerId = ownerId
-            };
-
-            var created = await _equipmentService.ShareEquipment(equipment);
-
-            return CreatedAtAction(nameof(GetById), new { id = created.Id },
-                new EquipmentResponseDto
-                {
-                    Id = created.Id,
-                    Name = created.Name,
-                    Category = created.Category,
-                    Description = created.Description,
-                    OwnerId = created.OwnerId,
-                    CreatedAt = created.CreatedAt
-                });
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = result.Data!.Id },
+                result.Data);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> Delete([FromBody] EquipmentDto equipmentDto)
+        // PUT /api/equipment/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(long id, [FromBody] EquipmentUpdateDto dto)
         {
-            try
-            {
-                var equipment = new Equipment
-                {
-                    Id = equipmentDto.Id,
-                    Name = equipmentDto.Name,
-                    Category = equipmentDto.Category,
-                    Description = equipmentDto.Description,
-                    OwnerId = equipmentDto.OwnerId
-                };
-                
-                await _equipmentService.UnshareEquipment(equipment);
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
-                return Ok(true);
-            }
-            catch (Exception ex)
+            var result = await _equipmentService.UpdateEquipment(id, dto, userId);
+            if (!result.Success)
             {
-                return BadRequest(ex.Message);
+                // Differentiate between authorization and validation errors
+                if (result.ErrorMessage!.Contains("not authorized"))
+                    return Forbid();
+
+                return BadRequest(new { message = result.ErrorMessage });
             }
+
+            return Ok(new { message = "Equipment updated successfully." });
         }
 
-        [HttpPut]
-        public async Task<ActionResult<EquipmentDto>> Update([FromBody] EquipmentDto equipmentDto)
+        // DELETE /api/equipment/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
         {
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
 
-            try
+            var result = await _equipmentService.UnshareEquipment(id, userId);
+            if (!result.Success)
             {
-                var equipment = new Equipment
-                {
-                    Id = equipmentDto.Id,
-                    Name = equipmentDto.Name,
-                    Category = equipmentDto.Category,
-                    Description = equipmentDto.Description,
-                    OwnerId = equipmentDto.OwnerId
-                };
-                await _equipmentService.UpdateEquipment(equipment);
+                if (result.ErrorMessage!.Contains("not authorized"))
+                    return Forbid();
 
-                return Ok(true);
+                return BadRequest(new { message = result.ErrorMessage });
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            return Ok(new { message = "Equipment deleted successfully." });
         }
 
+        #endregion
     }
 }

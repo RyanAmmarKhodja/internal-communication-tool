@@ -8,17 +8,6 @@ namespace campus_insider.Services
     // Result type to replace exceptions
     
 
-    // Pagination wrapper
-    public class PagedResult<T>
-    {
-        public List<T> Items { get; init; } = new();
-        public int TotalCount { get; init; }
-        public int PageNumber { get; init; }
-        public int PageSize { get; init; }
-        public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
-        public bool HasPrevious => PageNumber > 1;
-        public bool HasNext => PageNumber < TotalPages;
-    }
 
     public class LoanService
     {
