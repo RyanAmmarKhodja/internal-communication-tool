@@ -1,225 +1,259 @@
-﻿namespace campus_insider.Data
-{
-    using campus_insider.Models;
-    using Microsoft.EntityFrameworkCore;
+﻿using campus_insider.Models;
+using Microsoft.EntityFrameworkCore;
 
+namespace campus_insider.Data
+{
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
-        public DbSet<User> Users => Set<User>();
-        public DbSet<CarpoolTrip> CarpoolTrips => Set<CarpoolTrip>();
-        public DbSet<Equipment> Equipment => Set<Equipment>();
-        public DbSet<Loan> Loans => Set<Loan>();
-        public DbSet<Notification> Notifications => Set<Notification>();
+        // DbSets
+        public DbSet<User> Users { get; set; }
+        public DbSet<Equipment> Equipment { get; set; }
+        public DbSet<Loan> Loans { get; set; }
+        public DbSet<CarpoolTrip> CarpoolTrips { get; set; }
+        public DbSet<CarpoolPassenger> CarpoolPassengers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // =========================================================
-            // Users
-            // =========================================================
+            #region --- User Configuration ---
+
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("users");
-
+                entity.ToTable("Users");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
-                      .HasColumnName("id");
-
-                entity.Property(e => e.Email)
-                      .HasColumnName("email")
-                      .HasMaxLength(150)
-                      .IsRequired();
-
-                entity.HasIndex(e => e.Email)
-                      .IsUnique();
-
-                entity.Property(e => e.Password)
-                      .HasColumnName("password")
-                      .HasMaxLength(255)
-                      .IsRequired();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.FirstName)
-                      .HasColumnName("first_name")
-                      .HasMaxLength(50)
-                      .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.LastName)
-                      .HasColumnName("last_name")
-                      .HasMaxLength(50)
-                      .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.HasIndex(e => e.Email)
+                    .IsUnique();
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(500);
 
                 entity.Property(e => e.Role)
-                      .HasColumnName("role")
-                      .HasMaxLength(20)
-                      .HasDefaultValue("USER")
-                      .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("USER");
 
                 entity.Property(e => e.CreatedAt)
-                      .HasColumnName("created_at")
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
 
-            // =========================================================
-            // Carpool Trips
-            // =========================================================
-            modelBuilder.Entity<CarpoolTrip>(entity =>
-            {
-                entity.ToTable("carpool_trips");
+            #endregion
 
-                entity.HasKey(e => e.Id);
+            #region --- Equipment Configuration ---
 
-                entity.Property(e => e.Departure)
-                      .HasColumnName("departure")
-                      .HasMaxLength(100)
-                      .IsRequired();
-
-                entity.Property(e => e.Destination)
-                      .HasColumnName("destination")
-                      .HasMaxLength(100)
-                      .IsRequired();
-
-                entity.Property(e => e.DepartureTime)
-                      .HasColumnName("departure_time")
-                      .IsRequired();
-
-                entity.Property(e => e.AvailableSeats)
-                      .HasColumnName("available_seats")
-                      .IsRequired();
-
-                entity.Property(e => e.CreatedAt)
-                      .HasColumnName("created_at")
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.HasOne(e => e.Driver)
-                      .WithMany(u => u.CarpoolTrips)
-                      .HasForeignKey(e => e.DriverId)
-                      .HasConstraintName("fk_carpool_driver")
-                      .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // =========================================================
-            // Equipment
-            // =========================================================
             modelBuilder.Entity<Equipment>(entity =>
             {
-                entity.ToTable("equipment");
-
+                entity.ToTable("Equipment");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id)
-                      .HasColumnName("id")
-                      .ValueGeneratedOnAdd();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
-                      .HasColumnName("name")
-                      .HasMaxLength(100)
-                      .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(200);
 
                 entity.Property(e => e.Category)
-                      .HasColumnName("category")
-                      .HasMaxLength(50)
-                      .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Description)
-                      .HasColumnName("description")
-                      .HasMaxLength(255);
-
-                entity.Property(e => e.CreatedAt)
-                      .HasColumnName("created_at")
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasMaxLength(1000);
 
                 entity.Property(e => e.OwnerId)
-                      .HasColumnName("owner_id")
-                      .IsRequired();
+                    .IsRequired();
 
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                // Relationships
                 entity.HasOne(e => e.Owner)
-                      .WithMany(u => u.Equipment)
-                      .HasForeignKey(e => e.OwnerId)
-                      .HasConstraintName("fk_equipment_owner")
-                      .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(u => u.Equipment)
+                    .HasForeignKey(e => e.OwnerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Indexes
+                entity.HasIndex(e => e.OwnerId);
+                entity.HasIndex(e => e.Category);
             });
 
-            // =========================================================
-            // Loans
-            // =========================================================
+            #endregion
+
+            #region --- Loan Configuration ---
+
             modelBuilder.Entity<Loan>(entity =>
             {
-                entity.ToTable("loans");
-
+                entity.ToTable("Loans");
                 entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.EquipmentId)
+                    .IsRequired();
+
+                entity.Property(e => e.BorrowerId)
+                    .IsRequired();
 
                 entity.Property(e => e.StartDate)
-                      .HasColumnName("start_date")
-                      .IsRequired();
+                    .IsRequired();
 
                 entity.Property(e => e.EndDate)
-                      .HasColumnName("end_date")
-                      .IsRequired();
+                    .IsRequired();
+
+                entity.Property(e => e.RequestedEndDate);
 
                 entity.Property(e => e.Status)
-                      .HasColumnName("status")
-                      .HasMaxLength(20)
-                      .HasDefaultValue("PENDING")
-                      .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("PENDING");
 
                 entity.Property(e => e.CreatedAt)
-                      .HasColumnName("created_at")
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(e => e.Equipment)
-                      .WithMany(eq => eq.Loans)
-                      .HasForeignKey(e => e.EquipmentId)
-                      .HasConstraintName("fk_loan_equipment")
-                      .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(e => e.ReturnedAt);
 
-                entity.HasOne(e => e.Borrower)
-                      .WithMany(u => u.Loans)
-                      .HasForeignKey(e => e.BorrowerId)
-                      .HasConstraintName("fk_loan_borrower")
-                      .OnDelete(DeleteBehavior.Cascade);
+                // Relationships
+                entity.HasOne(l => l.Equipment)
+                    .WithMany(e => e.Loans)
+                    .HasForeignKey(l => l.EquipmentId)
+                    .OnDelete(DeleteBehavior.Restrict); // Don't cascade delete loans if equipment is deleted
+
+                entity.HasOne(l => l.Borrower)
+                    .WithMany(u => u.Loans)
+                    .HasForeignKey(l => l.BorrowerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Indexes
+                entity.HasIndex(l => l.EquipmentId);
+                entity.HasIndex(l => l.BorrowerId);
+                entity.HasIndex(l => l.Status);
+                entity.HasIndex(l => new { l.StartDate, l.EndDate });
             });
 
-            // =========================================================
-            // Notifications
-            // =========================================================
-            modelBuilder.Entity<Notification>(entity =>
-            {
-                entity.ToTable("notifications");
+            #endregion
 
+            #region --- CarpoolTrip Configuration ---
+
+            modelBuilder.Entity<CarpoolTrip>(entity =>
+            {
+                entity.ToTable("CarpoolTrips");
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Type)
-                      .HasColumnName("type")
-                      .HasMaxLength(30)
-                      .IsRequired();
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Content)
-                      .HasColumnName("content")
-                      .HasMaxLength(255)
-                      .IsRequired();
+                entity.Property(e => e.DriverId)
+                    .IsRequired();
 
-                entity.Property(e => e.IsRead)
-                      .HasColumnName("is_read")
-                      .HasDefaultValue(false);
+                entity.Property(e => e.Departure)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Destination)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.DepartureTime)
+                    .IsRequired();
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("PENDING");
+
+                entity.Property(e => e.VehicleDescription)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .HasDefaultValue("");
+
+                entity.Property(e => e.AvailableSeats)
+                    .IsRequired();
 
                 entity.Property(e => e.CreatedAt)
-                      .HasColumnName("created_at")
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(e => e.User)
-                      .WithMany(u => u.Notifications)
-                      .HasForeignKey(e => e.UserId)
-                      .HasConstraintName("fk_notification_user")
-                      .OnDelete(DeleteBehavior.Cascade);
+                // Relationships
+                entity.HasOne(c => c.Driver)
+                    .WithMany(u => u.CarpoolTripsAsDriver)
+                    .HasForeignKey(c => c.DriverId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Indexes
+                entity.HasIndex(c => c.DriverId);
+                entity.HasIndex(c => c.Status);
+                entity.HasIndex(c => c.DepartureTime);
+                entity.HasIndex(c => new { c.Departure, c.Destination });
             });
+
+            #endregion
+
+            #region --- CarpoolPassenger Configuration ---
+
+            modelBuilder.Entity<CarpoolPassenger>(entity =>
+            {
+                entity.ToTable("CarpoolPassengers");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CarpoolTripId)
+                    .IsRequired();
+
+                entity.Property(e => e.UserId)
+                    .IsRequired();
+
+                entity.Property(e => e.JoinedAt)
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                // Relationships
+                entity.HasOne(cp => cp.CarpoolTrip)
+                    .WithMany(c => c.Passengers)
+                    .HasForeignKey(cp => cp.CarpoolTripId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(cp => cp.User)
+                    .WithMany(u => u.CarpoolPassengers)
+                    .HasForeignKey(cp => cp.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Indexes
+                entity.HasIndex(cp => cp.CarpoolTripId);
+                entity.HasIndex(cp => cp.UserId);
+
+                // Composite unique index - user can't join the same trip twice
+                entity.HasIndex(cp => new { cp.CarpoolTripId, cp.UserId })
+                    .IsUnique();
+            });
+
+            #endregion
         }
     }
-
 }

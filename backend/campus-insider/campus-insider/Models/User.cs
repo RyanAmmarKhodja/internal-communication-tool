@@ -12,10 +12,15 @@
         public DateTime CreatedAt { get; set; }
 
         // Navigation properties
-        public ICollection<CarpoolTrip> CarpoolTrips { get; set; } = new List<CarpoolTrip>();
-        public ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
-        public ICollection<Loan> Loans { get; set; } = new List<Loan>();
-        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        //public ICollection<CarpoolTrip> CarpoolTrips { get; set; } = new List<CarpoolTrip>();
+        //public ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
+        //public ICollection<Loan> Loans { get; set; } = new List<Loan>();
+        //public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+        public List<Equipment> Equipment { get; set; } = new();
+        public List<Loan> Loans { get; set; } = new();
+        public List<CarpoolTrip> CarpoolTripsAsDriver { get; set; } = new();
+        public List<CarpoolPassenger> CarpoolPassengers { get; set; } = new();
     }
 
 }
