@@ -1,211 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthProvider";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { Search, MessageCircle, Car, Package, Home, PlusSquare } from 'lucide-react';
 
-function Navbar(props) {
-  const auth = useAuth();
-  const navigate = useNavigate();
-  const [error, setError] = React.useState(null);
-  const jungleActive = { color: "#1C7435", fontWeight: "bold" };
-
-  const [search, setSearch] = useState("");
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    navigate(`/catalogue?search=${encodeURIComponent(search)}`);
-  };
-
-  const submit = async () => {
-    try {
-      const res = await auth.logout();
-      console.log("Logged out", res);
-      navigate("/");
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    }
-  };
+const Navbar = () => {
   return (
-    <>
-      <nav
-        className="navbar navbar-expand-lg"
-        style={{
-          position: "fixed",
-          width: "100%",
-          zIndex: 10,
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(8px)",
-          boxShadow: "0 2px 15px rgba(0,0,0,0.05)",
-          borderBottom: "1px solid #e9ecef",
-          transition: "all 0.3s ease",
-        }}
-        data-bs-theme="light"
-      >
-        <div
-          className="container-fluid"
-          style={props.loggedIn ? { paddingLeft: "90px" } : {}}
-        >
-          <NavLink
-            className="navbar-brand"
-            to="/"
-            style={{
-              textDecoration: "none",
-              color: "#1C7435",
-              fontWeight: "800",
-              fontSize: "1.6rem",
-              letterSpacing: "-0.5px",
-              display: "flex",
-              alignItems: "center",
-              transition: "transform 0.2s ease",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "scale(1.02)")
-            }
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <span style={{ marginRight: "8px" }}></span> Azbobinette
-          </NavLink>
-
-          <button
-            className="navbar-toggler border-0"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarColor03"
-            aria-controls="navbarColor03"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarColor03">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link mx-2"
-                  to="/"
-                  style={({ isActive }) => ({
-                    color: isActive ? "#1C7435" : "#6c757d",
-                    textDecoration: "none",
-                    fontWeight: isActive ? "600" : "500",
-                    borderBottom: isActive
-                      ? "2px solid #1C7435"
-                      : "2px solid transparent",
-                    transition: "all 0.2s ease",
-                    paddingBottom: "2px",
-                  })}
-                >
-                  Accueil
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link mx-2"
-                  to="/catalogue"
-                  style={({ isActive }) => ({
-                    color: isActive ? "#1C7435" : "#6c757d",
-                    textDecoration: "none",
-                    fontWeight: isActive ? "600" : "500",
-                    borderBottom: isActive
-                      ? "2px solid #1C7435"
-                      : "2px solid transparent",
-                    transition: "all 0.2s ease",
-                    paddingBottom: "2px",
-                  })}
-                >
-                  Animaux
-                </NavLink>
-              </li>
-               <li className="nav-item">
-                <NavLink
-                  className="nav-link mx-2"
-                  to="/about"
-                  style={({ isActive }) => ({
-                    color: isActive ? "#1C7435" : "#6c757d",
-                    textDecoration: "none",
-                    fontWeight: isActive ? "600" : "500",
-                    borderBottom: isActive
-                      ? "2px solid #1C7435"
-                      : "2px solid transparent",
-                    transition: "all 0.2s ease",
-                    paddingBottom: "2px",
-                  })}
-                >
-                  Préparer sa visite
-                </NavLink>
-              </li>
-            </ul>
-
-            <form
-              className="d-flex align-items-center"
-              onSubmit={handleSearch}
-              style={{ position: "relative" }}
-            >
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Rechercher un animal..."
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-                style={{
-                  borderRadius: "20px",
-                  backgroundColor: "#f8f9fa",
-                  border: "1px solid #dee2e6",
-                  paddingLeft: "15px",
-                  fontSize: "0.9rem",
-                  width: "250px",
-                  transition: "width 0.3s ease, box-shadow 0.3s ease",
-                }}
-                onFocus={(e) => {
-                  e.target.style.width = "300px";
-                  e.target.style.boxShadow =
-                    "0 0 0 0.25rem rgba(28, 116, 53, 0.1)";
-                }}
-                onBlur={(e) => (e.target.style.width = "250px")}
-              />
-              <button
-                className="btn"
-                type="submit"
-                style={{
-                  backgroundColor: "#1C7435",
-                  color: "white",
-                  borderRadius: "20px",
-                  padding: "6px 20px",
-                  fontWeight: "500",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#155d2a")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#1C7435")
-                }
-              >
-                Chercher
-              </button>
-            </form>
-
-            {props.loggedIn && (
-              <a
-                className="btn btn-link"
-                href="#"
-                onClick={submit}
-                style={{
-                  marginLeft: "15px",
-                  color: "#dc3545",
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                }}
-              >
-                Déconnexion
-              </a>
-            )}
+    <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
+      {/* Upper Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16 gap-8">
+          
+          {/* 1. Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <span className="text-2xl font-black text-[#F56B2A] tracking-tighter cursor-pointer">
+              CampusInsider
+            </span>
           </div>
+
+          {/* 2. Search Bar (Minimalist Style) */}
+          <div className="hidden md:flex flex-1 max-w-md relative">
+            <input
+              type="text"
+              placeholder="Rechercher sur CampusInsider..."
+              className="w-full bg-gray-100 border-none rounded-lg py-2 pl-4 pr-10 focus:ring-2 focus:ring-[#F56B2A] focus:bg-white transition-all outline-none text-sm"
+            />
+            <div className="absolute right-3 top-2.5 text-gray-500">
+              <Search size={18} />
+            </div>
+          </div>
+
+          {/* 3. Navigation Links */}
+          <div className="hidden lg:flex items-center space-x-1">
+            <NavLink icon={<Home size={20}/>} label="Accueil" />
+            <NavLink icon={<Package size={20}/>} label="Matériel" />
+            <NavLink icon={<Car size={20}/>} label="Covoiturage" />
+            <NavLink icon={<MessageCircle size={20}/>} label="Messagerie" />
+          </div>
+
+          {/* 4. Action Button (The "LeBonCoin" Orange Button) */}
+          <div className="flex items-center">
+            <button className="flex items-center gap-2 bg-[#F56B2A] hover:bg-[#E35B1D] text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors shadow-sm">
+              <PlusSquare size={18} />
+              <span className="hidden sm:inline">Déposer une annonce</span>
+            </button>
+          </div>
+
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
-}
+};
+
+// Helper Component for Links
+const NavLink = ({ icon, label }) => (
+  <a href="#" className="flex flex-col items-center px-3 py-1 text-[#1A1A1A] hover:bg-gray-100 rounded-lg group transition-all">
+    <span className="text-gray-600 group-hover:text-[#F56B2A] transition-colors">{icon}</span>
+    <span className="text-[10px] font-medium mt-0.5">{label}</span>
+  </a>
+);
 
 export default Navbar;

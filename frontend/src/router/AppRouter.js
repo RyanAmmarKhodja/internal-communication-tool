@@ -6,6 +6,8 @@ import { useAuth } from "../AuthProvider";
 import ClientLayout from "../layouts/ClientLayout";
 // import AdminLayout from "../layouts/AdminLayout";
 import Home from "../pages/Home";
+import Equipment from "../pages/Equipment";
+import ShareEquipment from "../pages/ShareEquipment";
 
 export default function AppRouter() {
   const PrivateRoute = () => {
@@ -23,6 +25,9 @@ export default function AppRouter() {
       <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/equipment" element={<Equipment />} />
+          <Route path="/share_equipment" element={<ShareEquipment />} />
           <Route path="/login" element={<Login />} />
           {/* Catch-all route for 404 */}
           <Route path="*" element={<PageNotFound />} />
