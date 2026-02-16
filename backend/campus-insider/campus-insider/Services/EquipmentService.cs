@@ -10,10 +10,11 @@ namespace campus_insider.Services
     public class EquipmentService
     {
         private readonly AppDbContext _context;
-
-        public EquipmentService(AppDbContext context)
+        private readonly ImageService _imageService;
+        public EquipmentService(AppDbContext context, ImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
         #region --- Queries ---
@@ -108,7 +109,7 @@ namespace campus_insider.Services
 
         #region --- Commands ---
 
-        public async Task<ServiceResult<EquipmentResponseDto>> ShareEquipment(EquipmentCreateDto dto, long ownerId)
+        public async Task<ServiceResult<EquipmentResponseDto>> ShareEquipment(EquipmentCreateDto dto, long ownerId, IFormFile? image = null)
         {
             // Validation 1: Name is required and reasonable length
             if (string.IsNullOrWhiteSpace(dto.Name))
@@ -129,11 +130,27 @@ namespace campus_insider.Services
             if (exists)
                 return ServiceResult<EquipmentResponseDto>.Fail("You already have equipment with this name.");
 
+            string? imageUrl = null;
+            string? imageFileName = null;
+
+            // Handle image upload if provided
+            if (image != null)
+            {
+                var uploadResult = await _imageService.UploadEquipmentImage(image);
+                if (!uploadResult.Success)
+                    return ServiceResult<EquipmentResponseDto>.Fail(uploadResult.ErrorMessage!);
+
+                imageUrl = uploadResult.Data!.Url;
+                imageFileName = uploadResult.Data.FileName;
+            }
+
             var equipment = new Equipment
             {
                 Name = dto.Name.Trim(),
                 Category = dto.Category.Trim(),
                 Description = dto.Description?.Trim() ?? string.Empty,
+                ImageUrl = imageUrl,
+                ImageFileName = imageFileName,
                 OwnerId = ownerId,
                 CreatedAt = DateTime.UtcNow
             };
@@ -144,7 +161,7 @@ namespace campus_insider.Services
             return ServiceResult<EquipmentResponseDto>.Ok(MapToResponseDto(equipment));
         }
 
-        public async Task<ServiceResult> UpdateEquipment(long equipmentId, EquipmentUpdateDto dto, long requestingUserId)
+        public async Task<ServiceResult> UpdateEquipment(long equipmentId, EquipmentUpdateDto dto, long requestingUserId, IFormFile? newImage = null)
         {
             var equipment = await _context.Equipment.FindAsync(equipmentId);
             if (equipment == null)
@@ -178,6 +195,23 @@ namespace campus_insider.Services
             if (dto.Description != null)
                 equipment.Description = dto.Description.Trim();
 
+            if (newImage != null)
+            {
+                // Delete old image if exists
+                if (!string.IsNullOrWhiteSpace(equipment.ImageFileName))
+                {
+                    await _imageService.DeleteEquipmentImage(equipment.ImageFileName);
+                }
+
+                // Upload new image
+                var uploadResult = await _imageService.UploadEquipmentImage(newImage);
+                if (!uploadResult.Success)
+                    return ServiceResult.Fail(uploadResult.ErrorMessage!);
+
+                equipment.ImageUrl = uploadResult.Data!.Url;
+                equipment.ImageFileName = uploadResult.Data.FileName;
+            }
+
             await _context.SaveChangesAsync();
             return ServiceResult.Ok();
         }
@@ -199,6 +233,12 @@ namespace campus_insider.Services
 
             if (hasActiveLoans)
                 return ServiceResult.Fail("Cannot delete equipment with active or pending loans.");
+
+            // Delete image file if exists
+            if (!string.IsNullOrWhiteSpace(equipment.ImageFileName))
+            {
+                await _imageService.DeleteEquipmentImage(equipment.ImageFileName);
+            }
 
             _context.Equipment.Remove(equipment);
             await _context.SaveChangesAsync();

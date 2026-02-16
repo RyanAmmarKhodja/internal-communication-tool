@@ -22,7 +22,8 @@
         public string Category { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public long OwnerId { get; set; }
-        public string? OwnerName { get; set; } // Add this for feed display
+        public string? OwnerName { get; set; }
+        public string? ImageUrl { get; set; } // Add this
         public DateTime CreatedAt { get; set; }
     }
 }

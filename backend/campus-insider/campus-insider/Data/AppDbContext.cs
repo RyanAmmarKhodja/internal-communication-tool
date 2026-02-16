@@ -86,6 +86,12 @@ namespace campus_insider.Data
                 entity.Property(e => e.Description)
                     .HasMaxLength(1000);
 
+                entity.Property(e => e.ImageUrl)
+        .HasMaxLength(500);
+
+                entity.Property(e => e.ImageFileName)
+                    .HasMaxLength(255);
+
                 entity.Property(e => e.OwnerId)
                     .IsRequired();
 

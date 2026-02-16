@@ -78,12 +78,15 @@ namespace campus_insider.Controllers
 
         // POST /api/equipment
         [HttpPost]
-        public async Task<ActionResult<EquipmentResponseDto>> Create([FromBody] EquipmentCreateDto dto)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ActionResult<EquipmentResponseDto>> Create(
+         [FromForm] EquipmentCreateDto dto,
+         [FromForm] IFormFile? image)
         {
             var userId = GetCurrentUserId();
             if (userId == 0) return Unauthorized();
 
-            var result = await _equipmentService.ShareEquipment(dto, userId);
+            var result = await _equipmentService.ShareEquipment(dto, userId, image);
             if (!result.Success)
                 return BadRequest(new { message = result.ErrorMessage });
 
@@ -95,12 +98,14 @@ namespace campus_insider.Controllers
 
         // PUT /api/equipment/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(long id, [FromBody] EquipmentUpdateDto dto)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> Update(long id, [FromForm] EquipmentUpdateDto dto,
+        [FromForm] IFormFile? image)
         {
             var userId = GetCurrentUserId();
             if (userId == 0) return Unauthorized();
 
-            var result = await _equipmentService.UpdateEquipment(id, dto, userId);
+            var result = await _equipmentService.UpdateEquipment(id, dto, userId, image);
             if (!result.Success)
             {
                 // Differentiate between authorization and validation errors
@@ -132,6 +137,31 @@ namespace campus_insider.Controllers
             return Ok(new { message = "Equipment deleted successfully." });
         }
 
+
+        // POST /api/equipment/5/image (Alternative: separate endpoint for image-only updates)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost("{id}/image")]
+        public async Task<IActionResult> UpdateImage(long id, [FromForm] IFormFile image)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == 0) return Unauthorized();
+
+            var result = await _equipmentService.UpdateEquipment(
+                id,
+                new EquipmentUpdateDto(), // Empty DTO - only updating image
+                userId,
+                image);
+
+            if (!result.Success)
+            {
+                if (result.ErrorMessage!.Contains("not authorized"))
+                    return Forbid();
+
+                return BadRequest(new { message = result.ErrorMessage });
+            }
+
+            return Ok(new { message = "Image updated successfully." });
+        }
         #endregion
     }
 }

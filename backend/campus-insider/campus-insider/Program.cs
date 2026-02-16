@@ -48,6 +48,7 @@ builder.Services.AddScoped<EquipmentService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<ImageService>();
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddRateLimiter(options =>
 //{
@@ -113,7 +114,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 // 2. Enable Middleware (Order matters!)
 app.UseAuthentication();
-
+app.UseStaticFiles();
 app.UseSwagger();
 app.UseSwaggerUI();
 

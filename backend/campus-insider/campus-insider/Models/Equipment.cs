@@ -9,6 +9,12 @@
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; }
 
+
+        // Image fields
+        public string? ImageUrl { get; set; } // Public URL to access image
+        public string? ImageFileName { get; set; } // Original filename for reference
+
+        
         // Foreign key
         public long OwnerId { get; set; }
 

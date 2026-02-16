@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import api from '../api';
+import Loading from "../components/Loading"
+import { NavLink } from 'react-router-dom';
 
 const ShareEquipment = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -22,7 +26,16 @@ const ShareEquipment = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Form submission logic will be handled later
+
     console.log('Form submitted:', formData);
+
+    try{
+      api.post("")
+    }catch{
+
+    }finally{
+
+    }
   };
 
   return (
@@ -78,98 +91,18 @@ const ShareEquipment = () => {
           {/* Description */}
           <div className="mb-5">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description *
+              Description
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Décrivez votre matériel, ses caractéristiques, son état..."
+              placeholder="Décrivez votre matériel, ses caractéristiques..."
               rows="5"
               className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              required
+              
             />
             <p className="text-xs text-gray-500 mt-1">Minimum 50 caractères</p>
-          </div>
-
-          {/* Price and Location Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-            {/* Price per Day */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Prix par jour (€) *
-              </label>
-              <input
-                type="number"
-                name="pricePerDay"
-                value={formData.pricePerDay}
-                onChange={handleChange}
-                placeholder="15"
-                min="0"
-                step="0.5"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                required
-              />
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Localisation *
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="Ex: Paris 15ème"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Condition and Availability Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-            {/* Condition */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                État *
-              </label>
-              <select
-                name="condition"
-                value={formData.condition}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                required
-              >
-                <option value="">Sélectionner un état</option>
-                <option value="neuf">Neuf</option>
-                <option value="excellent">Excellent état</option>
-                <option value="bon">Bon état</option>
-                <option value="satisfaisant">État satisfaisant</option>
-              </select>
-            </div>
-
-            {/* Availability */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Disponibilité *
-              </label>
-              <select
-                name="availability"
-                value={formData.availability}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                required
-              >
-                <option value="">Sélectionner</option>
-                <option value="immediate">Immédiate</option>
-                <option value="week">Dans la semaine</option>
-                <option value="month">Dans le mois</option>
-                <option value="date">Date spécifique</option>
-              </select>
-            </div>
           </div>
 
           {/* Photos Upload */}
@@ -193,12 +126,12 @@ const ShareEquipment = () => {
 
           {/* Submit Buttons */}
           <div className="flex gap-3">
-            <button
-              type="button"
-              className="flex-1 px-6 py-3 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+            <NavLink
+              to="/"
+              className="text-center flex-1 px-6 py-3 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
             >
               Annuler
-            </button>
+            </NavLink>
             <button
               type="submit"
               className="flex-1 px-6 py-3 bg-orange-600 text-white rounded-md font-medium hover:bg-orange-700 transition-colors"
