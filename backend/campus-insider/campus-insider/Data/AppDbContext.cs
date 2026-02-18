@@ -132,6 +132,12 @@ namespace campus_insider.Data
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Content).IsRequired().HasMaxLength(2000);
                 entity.Property(e => e.ImageUrl);
+                entity.Property(e => e.Category)
+                    .HasMaxLength(100)
+                    .HasConversion<string>();
+                entity.Property(e => e.PostType)
+                    .HasMaxLength(100)
+                    .HasConversion<string>();
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
 
@@ -157,7 +163,7 @@ namespace campus_insider.Data
             modelBuilder.Entity<Equipment>(entity =>
             {
                 entity.Property(e => e.Location).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.Category).HasMaxLength(100);
+               
             });
 
             #endregion

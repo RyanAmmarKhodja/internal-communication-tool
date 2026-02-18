@@ -29,6 +29,7 @@ namespace campus_insider.Controllers
         // Query params: ?type=coride&page=1&pageSize=20
         [HttpGet]
         public async Task<IActionResult> GetFeed(
+            [FromQuery] string? category = null,
             [FromQuery] string? type = null,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
@@ -36,7 +37,7 @@ namespace campus_insider.Controllers
             if (page < 1 || pageSize < 1 || pageSize > 100)
                 return BadRequest(new { message = "Invalid pagination parameters" });
 
-            var posts = await _feedService.GetFeedAsync(type, page, pageSize);
+            var posts = await _feedService.GetFeedAsync(category,type, page, pageSize);
 
             return Ok(new
             {

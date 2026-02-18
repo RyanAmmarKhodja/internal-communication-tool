@@ -21,6 +21,8 @@ namespace campus_insider.Services
                 AuthorId = authorId,
                 Title = dto.Title,
                 Content = dto.Content,
+                Category = Category.COVOITURAGE,
+                PostType = dto.PostType,
                 DepartureTime = dto.DepartureTime,
                 DepartureLocation = dto.DepartureLocation,
                 DestinationLocation = dto.DestinationLocation,
@@ -45,6 +47,7 @@ namespace campus_insider.Services
                 Content = dto.Content,
                 Location = dto.Location,
                 Category = dto.Category,
+                PostType = dto.PostType,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };
@@ -70,22 +73,6 @@ namespace campus_insider.Services
                 _ => null
             };
         }
-
-        //public async Task<IEnumerable<PostDto>> GetUserPostsAsync(long userId)
-        //{
-        //    var posts = await _context.Posts
-        //        .Include(p => p.Author)
-        //        .Where(p => p.AuthorId == userId)
-        //        .OrderByDescending(p => p.CreatedAt)
-        //        .ToListAsync();
-
-        //    return posts.Select(post => post switch
-        //    {
-        //        Coride coride => MapToCorideDto(coride).Result,
-        //        Equipment equipment => MapToEquipmentDto(equipment).Result,
-        //        _ => null
-        //    }).Where(dto => dto != null).Cast<PostDto>();
-        //}
 
         public async Task<bool> DeletePostAsync(long id, long authorId)
         {
@@ -123,16 +110,26 @@ namespace campus_insider.Services
             {
                 Id = coride.Id,
                 AuthorId = coride.AuthorId,
+                Author = coride.Author != null ? new UserResponseDto
+                {
+                    Id = coride.Author.Id,
+                    FirstName = coride.Author.FirstName,
+                    LastName = coride.Author.LastName,
+                    Email = coride.Author.Email,
+                    Role = coride.Author.Role,
+                    CreatedAt = coride.Author.CreatedAt
+                } : null,
                 Title = coride.Title,
                 Content = coride.Content,
                 IsActive = coride.IsActive,
                 CreatedAt = coride.CreatedAt,
-                PostType = "Coride",
+                PostType = coride.PostType,
+                Category = coride.Category,
                 DepartureTime = coride.DepartureTime,
                 DepartureLocation = coride.DepartureLocation,
                 DestinationLocation = coride.DestinationLocation,
                 AvailableSeats = coride.AvailableSeats,
-                ReturnTime = coride.ReturnTime
+                ReturnTime = coride.ReturnTime,
             };
         }
 
@@ -147,13 +144,22 @@ namespace campus_insider.Services
             {
                 Id = equipment.Id,
                 AuthorId = equipment.AuthorId,
+                Author = equipment.Author != null ? new UserResponseDto
+                {
+                    Id = equipment.Author.Id,
+                    FirstName = equipment.Author.FirstName,
+                    LastName = equipment.Author.LastName,
+                    Email = equipment.Author.Email,
+                    Role = equipment.Author.Role,
+                    CreatedAt = equipment.Author.CreatedAt
+                } : null,
                 Title = equipment.Title,
                 Content = equipment.Content,
                 IsActive = equipment.IsActive,
                 CreatedAt = equipment.CreatedAt,
-                PostType = "Equipment",
+                Category = equipment.Category,
+                PostType = equipment.PostType,
                 Location = equipment.Location,
-                Category = equipment.Category
             };
         }
     }

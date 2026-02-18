@@ -6,7 +6,10 @@ using System.Security.Claims;
 
 namespace campus_insider.Controllers
 {
-    public class PostController : Controller
+    [Authorize]
+    [ApiController]
+    [Route("api/post")]
+    public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
        
@@ -42,7 +45,6 @@ namespace campus_insider.Controllers
         //}
 
         // POST: api/post/coride
-        [Authorize]
         [HttpPost("coride")]
         public async Task<IActionResult> CreateCoride([FromBody] CreateCorideDto dto)
         {
@@ -56,7 +58,6 @@ namespace campus_insider.Controllers
         }
 
         // POST: api/post/equipment
-        [Authorize]
         [HttpPost("equipment")]
         public async Task<IActionResult> CreateEquipment([FromBody] CreateEquipmentDto dto)
         {
@@ -71,7 +72,6 @@ namespace campus_insider.Controllers
 
 
         // PATCH: api/post/{id}/deactivate
-        [Authorize]
         [HttpPatch("{id}/deactivate")]
         public async Task<IActionResult> DeactivatePost(long id)
         {
@@ -86,7 +86,6 @@ namespace campus_insider.Controllers
         }
 
         // DELETE: api/post/{id}
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(long id)
         {

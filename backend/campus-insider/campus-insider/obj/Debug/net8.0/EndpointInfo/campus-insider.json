@@ -55,6 +55,13 @@
         ],
         "parameters": [
           {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "type",
             "in": "query",
             "schema": {
@@ -322,7 +329,7 @@
         }
       }
     },
-    "/{id}": {
+    "/api/post/{id}": {
       "get": {
         "tags": [
           "Post"
@@ -366,7 +373,7 @@
         }
       }
     },
-    "/coride": {
+    "/api/post/coride": {
       "post": {
         "tags": [
           "Post"
@@ -397,7 +404,7 @@
         }
       }
     },
-    "/equipment": {
+    "/api/post/equipment": {
       "post": {
         "tags": [
           "Post"
@@ -428,7 +435,7 @@
         }
       }
     },
-    "/{id}/deactivate": {
+    "/api/post/{id}/deactivate": {
       "patch": {
         "tags": [
           "Post"
@@ -638,6 +645,16 @@
   },
   "components": {
     "schemas": {
+      "Category": {
+        "enum": [
+          "MATERIAL",
+          "COVOITURAGE",
+          "MEDIAS",
+          "OUTILS",
+          "AUTRE"
+        ],
+        "type": "string"
+      },
       "CreateCorideDto": {
         "type": "object",
         "properties": {
@@ -648,6 +665,12 @@
           "content": {
             "type": "string",
             "nullable": true
+          },
+          "postType": {
+            "$ref": "#/components/schemas/PostType"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
           },
           "imageUrl": {
             "type": "string",
@@ -693,6 +716,12 @@
             "type": "string",
             "nullable": true
           },
+          "postType": {
+            "$ref": "#/components/schemas/PostType"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
           "imageUrl": {
             "type": "string",
             "nullable": true
@@ -701,12 +730,6 @@
             "maxLength": 200,
             "minLength": 0,
             "type": "string"
-          },
-          "category": {
-            "maxLength": 100,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -813,6 +836,13 @@
           }
         },
         "additionalProperties": false
+      },
+      "PostType": {
+        "enum": [
+          "OFFER",
+          "DEMAND"
+        ],
+        "type": "string"
       },
       "UserCreateDto": {
         "type": "object",

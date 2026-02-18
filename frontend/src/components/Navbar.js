@@ -58,16 +58,18 @@ const Navbar = () => {
             </NavLink>
 
             <button className="bg-red-500 text-white " onClick={auth.logout}>
-          LOGOUT
+              LOGOUT
             </button>
           </div>
 
           {/* 4. Action Button (The "LeBonCoin" Orange Button) */}
           <div className="flex items-center">
-            <button className="flex items-center gap-2 bg-[#F56B2A] hover:bg-[#E35B1D] text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors shadow-sm">
-              <PlusSquare size={18} />
-              <span className="hidden sm:inline">Déposer une annonce</span>
-            </button>
+            <NavLink to="/create-post">
+              <button className="flex items-center gap-2 bg-[#F56B2A] hover:bg-[#E35B1D] text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors shadow-sm">
+                <PlusSquare size={18} />
+                <span className="hidden sm:inline">Déposer une annonce</span>
+              </button>
+            </NavLink>
           </div>
         </div>
       </div>

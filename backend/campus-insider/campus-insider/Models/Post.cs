@@ -10,6 +10,8 @@ namespace campus_insider.Models
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
+        public Category Category { get; set; } = Category.AUTRE;
+        public PostType PostType { get; set; } = PostType.OFFER;
 
         // State
         public bool IsActive { get; set; } = true;

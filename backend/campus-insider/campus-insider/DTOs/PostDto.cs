@@ -10,11 +10,19 @@ namespace campus_insider.DTOs
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
-        public string Category { get; set; } = string.Empty;
+
+        public PostType PostType { get; set; }
+        public Category Category { get; set; }
         public bool IsActive { get; set; }
-        public string PostType { get; set; }
+
+        public DateTime? DepartureTime { get; set; }
+        public string? DepartureLocation { get; set; }
+        public string? DestinationLocation { get; set; }
+        public int? AvailableSeats { get; set; }
+        public DateTime? ReturnTime { get; set; }
 
         public long AuthorId { get; set; }
+        public UserResponseDto? Author { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 
@@ -22,6 +30,9 @@ namespace campus_insider.DTOs
     {
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
+
+        public PostType PostType { get; set; } = PostType.OFFER;
+        public Category Category { get; set; } = Category.AUTRE;
         public string? ImageUrl { get; set; }
     }
 
@@ -32,8 +43,15 @@ namespace campus_insider.DTOs
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
-        public string Category { get; set; } = string.Empty;
-       
+        public PostType PostType { get; set; }
+        public Category Category { get; set; }
+
+        public DateTime? DepartureTime { get; set; }
+        public string? DepartureLocation { get; set; }
+        public string? DestinationLocation { get; set; }
+        public int? AvailableSeats { get; set; }
+        public DateTime? ReturnTime { get; set; }
+
         public UserResponseDto Author { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
     }
@@ -44,13 +62,14 @@ namespace campus_insider.DTOs
     //  CORIDE
     public class CorideDto : PostDto
     {
-        public DateTime DepartureTime { get; set; }
-        public string DepartureLocation { get; set; } = string.Empty;
-        public string DestinationLocation { get; set; } = string.Empty;
-        public int AvailableSeats { get; set; }
-        public bool HasReturnTrip { get; set; }
-        public DateTime? ReturnTime { get; set; }
+        public new DateTime DepartureTime { get; set; }
+        public new string DepartureLocation { get; set; } = string.Empty;
+        public new string DestinationLocation { get; set; } = string.Empty;
+        public new int AvailableSeats { get; set; }
+        public new DateTime? ReturnTime { get; set; }
     }
+
+
     public class CreateCorideDto : PostCreateDto
     {
         public DateTime DepartureTime { get; set; }
@@ -71,7 +90,7 @@ namespace campus_insider.DTOs
     public class EquipmentDto : PostDto
     {
         public string Location { get; set; } = string.Empty;
-        public string? Category { get; set; }
+       
     }
 
 
@@ -82,8 +101,5 @@ namespace campus_insider.DTOs
         [StringLength(200)]
         public string Location { get; set; } = string.Empty;
 
-
-        [StringLength(100)]
-        public string? Category { get; set; }
     }
 }
