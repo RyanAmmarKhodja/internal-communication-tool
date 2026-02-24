@@ -52,7 +52,7 @@ const CreatePost = () => {
     // Image upload
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
-    //const [uploadingImage, setUploadingImage] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const isCovoiturage = category === 'COVOITURAGE';
 
