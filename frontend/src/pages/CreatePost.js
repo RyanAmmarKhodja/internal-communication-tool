@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Car, Wrench, Film, Cpu, HelpCircle, ArrowLeft,
-    MapPin, Clock, Users, Loader2, Send, Tag, ArrowRight, ImagePlus, X
+    MapPin, Clock, Users, Loader2, Send, ImagePlus, X
 } from 'lucide-react';
 import api from '../api';
 
@@ -52,7 +52,7 @@ const CreatePost = () => {
     // Image upload
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
-    const [uploadingImage, setUploadingImage] = useState(false);
+    //const [uploadingImage, setUploadingImage] = useState(false);
 
     const isCovoiturage = category === 'COVOITURAGE';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import * as signalR from "@microsoft/signalr";
 import { Send, ArrowLeft, MoreVertical, Search, Plus, X, UserPlus } from "lucide-react";
@@ -15,7 +15,6 @@ const Chat = () => {
   const [connection, setConnection] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  const typingTimeoutRef = useRef(null);
 
   // User search state
   const [showUserSearch, setShowUserSearch] = useState(false);

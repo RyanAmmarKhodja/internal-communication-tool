@@ -1,18 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
 import api from "../api";
 import {
-  Search,
   MessageCircle,
-  Car,
-  Package,
   Home,
   PlusSquare,
   Bell,
-  User,
   LogOut,
-  X,
   ChartNoAxesCombined,
 } from "lucide-react";
 

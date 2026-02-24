@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Clock, Users, ArrowRight, ChevronLeft, ChevronRight,
   Wrench, Car, Search, Loader2, Film, Cpu, HelpCircle,
-  Tag, Trash2, User as UserIcon
+ Trash2
 } from 'lucide-react';
 import api from '../api';
 import { useAuth } from '../AuthProvider';

@@ -8,11 +8,11 @@ import Post from "../pages/Post";
 import CreatePost from "../pages/CreatePost";
 import Chat from "../pages/Chat";
 import Statistics from "../pages/Statistics";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function AppRouter() {
   const auth = useAuth();
-  const [user, setUser] = useState();
+ // const [user, setUser] = useState();
 
   // If authenticated, show the Layout + Children. If not, redirect to login.
   const PrivateRoute = () => {

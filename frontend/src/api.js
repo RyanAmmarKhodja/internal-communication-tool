@@ -19,9 +19,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-// Custom logout function to clear user data and redirect to login
-const logoutUser = () => {
-  localStorage.removeItem("token");
-  delete api.defaults.headers.common["Authorization"];
-  window.location.href = "/login"; // Redirect to login page
-};

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import  { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
     MapPin, Clock, Users, ArrowRight, ArrowLeft, Car, Wrench,
-    Loader2, Trash2, User as UserIcon, Mail, Calendar, Tag, Eye, EyeOff,
+    Loader2, Trash2, User as Mail, Calendar, Tag, Eye, EyeOff,
     Film, Cpu, HelpCircle, MessageSquare
 } from 'lucide-react';
 import api from '../api';
