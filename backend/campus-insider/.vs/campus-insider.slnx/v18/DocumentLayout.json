@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Projects\\campus-insider\\backend\\campus-insider\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|solutionrelative:campus-insider\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|solutionrelative:campus-insider\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\wwwroot\\uploads\\equipment\\ada41fc5-330d-4331-8dcd-c1bd9a9af3ed.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|solutionrelative:campus-insider\\wwwroot\\uploads\\equipment\\ada41fc5-330d-4331-8dcd-c1bd9a9af3ed.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
     },
@@ -13,14 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|solutionrelative:campus-insider\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|solutionrelative:campus-insider\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|solutionrelative:campus-insider\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CECACB46-CC74-ECB7-7D9F-8863F59B9AC1}|campus-insider\\campus-insider.csproj|c:\\projects\\campus-insider\\backend\\campus-insider\\campus-insider\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -82,11 +82,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "ada41fc5-330d-4331-8dcd-c1bd9a9af3ed.png",
               "DocumentMoniker": "C:\\Projects\\campus-insider\\backend\\campus-insider\\campus-insider\\wwwroot\\uploads\\equipment\\ada41fc5-330d-4331-8dcd-c1bd9a9af3ed.png",
               "RelativeDocumentMoniker": "campus-insider\\wwwroot\\uploads\\equipment\\ada41fc5-330d-4331-8dcd-c1bd9a9af3ed.png",
@@ -98,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Projects\\campus-insider\\backend\\campus-insider\\campus-insider\\Dockerfile",
               "RelativeDocumentMoniker": "campus-insider\\Dockerfile",
@@ -106,12 +106,11 @@
               "RelativeToolTip": "campus-insider\\Dockerfile",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-02-23T23:50:16.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-23T23:50:16.873Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": ".gitignore",
               "DocumentMoniker": "C:\\Projects\\campus-insider\\backend\\campus-insider\\campus-insider\\.gitignore",
               "RelativeDocumentMoniker": "campus-insider\\.gitignore",
@@ -119,12 +118,11 @@
               "RelativeToolTip": "campus-insider\\.gitignore",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-02-23T23:45:35.759Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-23T23:45:35.759Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "appsettings.Production.json",
               "DocumentMoniker": "C:\\Projects\\campus-insider\\backend\\campus-insider\\campus-insider\\appsettings.Production.json",
               "RelativeDocumentMoniker": "campus-insider\\appsettings.Production.json",
@@ -132,7 +130,8 @@
               "RelativeToolTip": "campus-insider\\appsettings.Production.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-22T14:11:16.7Z"
+              "WhenOpened": "2026-02-22T14:11:16.7Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -292,7 +291,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Projects\\campus-insider\\backend\\campus-insider\\campus-insider\\appsettings.json",
               "RelativeDocumentMoniker": "campus-insider\\appsettings.json",
@@ -300,7 +299,8 @@
               "RelativeToolTip": "campus-insider\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-19T21:05:12.619Z"
+              "WhenOpened": "2026-02-19T21:05:12.619Z",
+              "EditorCaption": ""
             }
           ]
         }
