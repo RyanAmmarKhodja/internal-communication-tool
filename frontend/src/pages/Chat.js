@@ -72,7 +72,7 @@ const Chat = () => {
     }
 
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl("/hubs/chat", {
+      .withUrl(`${process.env.REACT_APP_WS_URL}`, {
         accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()
