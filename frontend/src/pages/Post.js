@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     MapPin, Clock, Users, ArrowRight, ArrowLeft, Car, Wrench,
@@ -91,7 +91,7 @@ const Post = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
+                <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
             </div>
         );
     }
@@ -102,7 +102,7 @@ const Post = () => {
                 <p className="text-red-500 text-lg">{error || "Annonce introuvable."}</p>
                 <button
                     onClick={() => navigate('/feed')}
-                    className="text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1"
+                    className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
                 >
                     <ArrowLeft className="w-4 h-4" /> Retour au fil
                 </button>
@@ -279,7 +279,7 @@ const Post = () => {
                             {typeKey === 'OFFER' ? 'Proposé par' : 'Recherché par'}
                         </h2>
                         <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-xl font-bold shadow-sm">
+                            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-sm">
                                 {(post.author.firstName || '?')[0]}
                             </div>
                             <div className="flex-1">
@@ -296,7 +296,7 @@ const Post = () => {
                         {!isAuthor && (
                             <button
                                 onClick={() => navigate(`/chat?userId=${post.author.id}&postId=${post.id}`)}
-                                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#F56B2A] text-white hover:bg-[#E35B1D] font-semibold text-sm transition-colors shadow-sm"
+                                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#0A66C2] text-white hover:bg-[#084B8A] font-semibold text-sm transition-colors shadow-sm"
                             >
                                 <MessageSquare className="w-4 h-4" />
                                 Envoyer un message

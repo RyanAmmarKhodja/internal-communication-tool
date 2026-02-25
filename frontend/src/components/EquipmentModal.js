@@ -67,7 +67,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -81,7 +81,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
               <option value="">Sélectionner une catégorie</option>
@@ -105,7 +105,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
               value={formData.description}
               onChange={handleChange}
               rows="4"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -123,7 +123,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
                 onChange={handleChange}
                 min="0"
                 step="0.5"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
             </div>
@@ -137,7 +137,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
             </div>
@@ -153,7 +153,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
                 name="condition"
                 value={formData.condition}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Sélectionner un état</option>
@@ -172,7 +172,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
                 name="availability"
                 value={formData.availability}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Sélectionner</option>
@@ -195,7 +195,7 @@ const EquipmentModal = ({ equipment, onClose }) => {
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-2 bg-orange-600 text-white rounded-md font-medium hover:bg-orange-700 transition-colors"
+              className="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors"
             >
               Enregistrer
             </button>

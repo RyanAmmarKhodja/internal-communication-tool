@@ -42,20 +42,20 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      // 1. Remove .then() and use direct assignment
-      const data = await api.get("/users/me");
-      
-      // 2. Set user based on your API response structure
-      setUser(data.data);
-    } catch (err) {
-      console.error("Error fetching user profile:", err);
-    }
-  };
+    const fetchUser = async () => {
+      try {
+        // 1. Remove .then() and use direct assignment
+        const data = await api.get("/users/me");
 
-  fetchUser();
-}, [auth.token]); // Re-run if token changes (e.g., after login/logout)
+        // 2. Set user based on your API response structure
+        setUser(data.data);
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+      }
+    };
+
+    fetchUser();
+  }, [auth.token]); // Re-run if token changes (e.g., after login/logout)
   // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -135,9 +135,9 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center">
             <NavLink
               to="/"
-              className="text-2xl font-black text-[#F56B2A] tracking-tighter"
+              className="text-2xl font-black text-[#0A66C2] tracking-tighter"
             >
-              CampusInsider
+              PartaCov
             </NavLink>
           </div>
 
@@ -145,8 +145,8 @@ const Navbar = () => {
           <div className="hidden md:flex flex-1 max-w-md relative">
             <input
               type="text"
-              placeholder="Rechercher sur CampusInsider..."
-              className="w-full bg-gray-100 border-none rounded-lg py-2 pl-4 pr-10 focus:ring-2 focus:ring-[#F56B2A] focus:bg-white transition-all outline-none text-sm"
+              placeholder="Rechercher sur PartaCov..."
+              className="w-full bg-gray-100 border-none rounded-lg py-2 pl-4 pr-10 focus:ring-2 focus:ring-[#0A66C2] focus:bg-white transition-all outline-none text-sm"
             />
             <div className="absolute right-3 top-2.5 text-gray-500">
               <Search size={18} />
@@ -181,7 +181,7 @@ const Navbar = () => {
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="flex flex-col items-center px-3 py-1 text-[#1A1A1A] hover:bg-gray-100 rounded-lg group transition-all relative"
               >
-                <span className="text-gray-600 group-hover:text-[#F56B2A] transition-colors relative">
+                <span className="text-gray-600 group-hover:text-[#0A66C2] transition-colors relative">
                   <Bell size={20} />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
@@ -202,7 +202,7 @@ const Navbar = () => {
                     {unreadCount > 0 && (
                       <button
                         onClick={handleMarkAllAsRead}
-                        className="text-xs text-[#F56B2A] hover:underline"
+                        className="text-xs text-[#0A66C2] hover:underline"
                       >
                         Tout marquer comme lu
                       </button>
@@ -222,9 +222,8 @@ const Navbar = () => {
                       notifications.map((notif) => (
                         <div
                           key={notif.id}
-                          className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
-                            !notif.isRead ? "bg-blue-50" : ""
-                          }`}
+                          className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${!notif.isRead ? "bg-blue-50" : ""
+                            }`}
                           onClick={() => {
                             handleMarkAsRead(notif.id);
                             if (notif.actionUrl) {
@@ -246,7 +245,7 @@ const Navbar = () => {
                               </p>
                             </div>
                             {!notif.isRead && (
-                              <div className="w-2 h-2 bg-[#F56B2A] rounded-full flex-shrink-0 mt-1"></div>
+                              <div className="w-2 h-2 bg-[#0A66C2] rounded-full flex-shrink-0 mt-1"></div>
                             )}
                           </div>
                         </div>
@@ -260,7 +259,7 @@ const Navbar = () => {
                         navigate("/notifications");
                         setShowNotifications(false);
                       }}
-                      className="text-sm text-[#F56B2A] hover:underline font-medium"
+                      className="text-sm text-[#0A66C2] hover:underline font-medium"
                     >
                       Voir toutes les notifications
                     </button>
@@ -273,7 +272,7 @@ const Navbar = () => {
           {/* 4. Action Button & Profile */}
           <div className="flex items-center gap-3">
             <NavLink to="/create-post">
-              <button className="flex items-center gap-2 bg-[#F56B2A] hover:bg-[#E35B1D] text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors shadow-sm">
+              <button className="flex items-center gap-2 bg-[#0A66C2] hover:bg-[#084B8A] text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors shadow-sm">
                 <PlusSquare size={18} />
                 <span className="hidden sm:inline">Déposer une annonce</span>
               </button>
@@ -285,7 +284,7 @@ const Navbar = () => {
                 onClick={() => setShowProfile(!showProfile)}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <div className="w-8 h-8 bg-[#F56B2A] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-8 h-8 bg-[#0A66C2] rounded-full flex items-center justify-center text-white font-bold">
                   {user?.firstName?.[0]?.toUpperCase() || "U"}
                 </div>
                 <span className="hidden md:block font-medium text-gray-900">
@@ -326,7 +325,7 @@ const Navbar = () => {
 // Helper Component for Links
 const NavLinkItem = ({ icon, label }) => (
   <div className="flex flex-col items-center px-3 py-1 text-[#1A1A1A] hover:bg-gray-100 rounded-lg group transition-all">
-    <span className="text-gray-600 group-hover:text-[#F56B2A] transition-colors">
+    <span className="text-gray-600 group-hover:text-[#0A66C2] transition-colors">
       {icon}
     </span>
     <span className="text-[10px] font-medium mt-0.5">{label}</span>

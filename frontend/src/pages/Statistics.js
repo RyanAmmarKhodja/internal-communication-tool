@@ -32,7 +32,7 @@ const StatCard = ({ icon: Icon, label, value, color = 'orange', sub }) => (
                 color === 'green' ? 'bg-emerald-100 text-emerald-600' :
                     color === 'purple' ? 'bg-purple-100 text-purple-600' :
                         color === 'rose' ? 'bg-rose-100 text-rose-600' :
-                            'bg-orange-100 text-orange-600'}`}>
+                            'bg-blue-100 text-blue-600'}`}>
             <Icon className="w-6 h-6" />
         </div>
         <div>
@@ -55,7 +55,7 @@ const SimpleBarChart = ({ data, label }) => {
                     <span className="text-xs text-gray-500 w-24 text-right truncate">{item.date || item.category}</span>
                     <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
                         <div
-                            className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all duration-500"
+                            className="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full transition-all duration-500"
                             style={{ width: `${(item.count / maxVal) * 100}%`, minWidth: item.count > 0 ? '12px' : '0' }}
                         />
                     </div>
@@ -109,7 +109,7 @@ const Statistics = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
             </div>
         );
     }
@@ -144,7 +144,7 @@ const Statistics = () => {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                        <BarChart3 className="w-8 h-8 text-orange-500" />
+                        <BarChart3 className="w-8 h-8 text-blue-500" />
                         Statistiques
                     </h1>
                     <p className="text-sm text-gray-500 mt-1">Tableau de bord administrateur</p>
@@ -153,7 +153,7 @@ const Statistics = () => {
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     <StatCard icon={Users} label="Utilisateurs" value={stats?.totalUsers} color="blue" />
-                    <StatCard icon={FileText} label="Annonces" value={stats?.totalPosts} color="orange"
+                    <StatCard icon={FileText} label="Annonces" value={stats?.totalPosts} color="blue"
                         sub={`${stats?.activePosts || 0} actives`} />
                     <StatCard icon={Car} label="Trajets confirmés" value={stats?.totalRidesConfirmed} color="green"
                         sub="Clics 'Envoyer un message'" />
@@ -207,7 +207,7 @@ const Statistics = () => {
                 {/* Most viewed posts table */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                     <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <Eye className="w-5 h-5 text-orange-500" />
+                        <Eye className="w-5 h-5 text-blue-500" />
                         Annonces les plus consultées
                     </h2>
                     {stats?.mostViewedPosts?.length > 0 ? (
@@ -236,7 +236,7 @@ const Statistics = () => {
                                                     </span>
                                                 </td>
                                                 <td className="py-3 px-2 text-gray-600">{post.authorName}</td>
-                                                <td className="py-3 px-2 text-right font-bold text-orange-600">{post.viewCount}</td>
+                                                <td className="py-3 px-2 text-right font-bold text-blue-600">{post.viewCount}</td>
                                             </tr>
                                         );
                                     })}

@@ -16,7 +16,7 @@ const CovoiturageCard = ({ ride, compact = false }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 text-sm text-gray-600">
           <span className="flex items-center gap-1">
@@ -32,7 +32,7 @@ const CovoiturageCard = ({ ride, compact = false }) => {
             {ride.seats} places
           </span>
         </div>
-        <p className="text-orange-600 font-bold">{ride.price}</p>
+        <p className="text-blue-600 font-bold">{ride.price}</p>
       </div>
     </div>
   );

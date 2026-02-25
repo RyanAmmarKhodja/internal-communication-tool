@@ -232,7 +232,7 @@ const Chat = () => {
             <h1 className="text-xl font-bold text-gray-900">Messages</h1>
             <button
               onClick={() => setShowUserSearch(!showUserSearch)}
-              className="p-2 rounded-full bg-[#F56B2A] text-white hover:bg-[#E35B1D] transition-colors"
+              className="p-2 rounded-full bg-[#0A66C2] text-white hover:bg-[#084B8A] transition-colors"
               title="Nouvelle conversation"
             >
               {showUserSearch ? <X size={18} /> : <Plus size={18} />}
@@ -241,8 +241,8 @@ const Chat = () => {
 
           {/* User search modal */}
           {showUserSearch && (
-            <div className="mb-3 bg-orange-50 border border-orange-200 rounded-xl p-3">
-              <p className="text-xs font-semibold text-orange-700 mb-2 flex items-center gap-1">
+            <div className="mb-3 bg-blue-50 border border-blue-200 rounded-xl p-3">
+              <p className="text-xs font-semibold text-blue-700 mb-2 flex items-center gap-1">
                 <UserPlus size={14} /> Nouvelle conversation
               </p>
               <input
@@ -250,7 +250,7 @@ const Chat = () => {
                 value={userSearchQuery}
                 onChange={(e) => setUserSearchQuery(e.target.value)}
                 placeholder="Rechercher un utilisateur..."
-                className="w-full bg-white border border-orange-200 rounded-lg py-2 px-3 focus:ring-2 focus:ring-[#F56B2A] focus:border-transparent transition-all outline-none text-sm"
+                className="w-full bg-white border border-blue-200 rounded-lg py-2 px-3 focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent transition-all outline-none text-sm"
                 autoFocus
               />
               {searchingUsers && (
@@ -262,9 +262,9 @@ const Chat = () => {
                     <button
                       key={user.id}
                       onClick={() => handleStartConversation(user.id)}
-                      className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-orange-100 transition-colors text-left"
+                      className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100 transition-colors text-left"
                     >
-                      <div className="w-8 h-8 bg-[#F56B2A] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-[#0A66C2] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                         {user.firstName?.[0]?.toUpperCase() || "?"}
                       </div>
                       <div className="min-w-0">
@@ -290,7 +290,7 @@ const Chat = () => {
               value={conversationFilter}
               onChange={(e) => setConversationFilter(e.target.value)}
               placeholder="Filtrer les conversations..."
-              className="w-full bg-gray-100 border-none rounded-lg py-2 pl-10 pr-4 focus:ring-2 focus:ring-[#F56B2A] focus:bg-white transition-all outline-none text-sm"
+              className="w-full bg-gray-100 border-none rounded-lg py-2 pl-10 pr-4 focus:ring-2 focus:ring-[#0A66C2] focus:bg-white transition-all outline-none text-sm"
             />
             <Search size={18} className="absolute left-3 top-2.5 text-gray-400" />
           </div>
@@ -314,7 +314,7 @@ const Chat = () => {
                     }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 bg-[#F56B2A] rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                    <div className="w-12 h-12 bg-[#0A66C2] rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                       {otherUser?.firstName?.[0]?.toUpperCase() || "?"}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -356,7 +356,7 @@ const Chat = () => {
                 >
                   <ArrowLeft size={20} />
                 </button>
-                <div className="w-10 h-10 bg-[#F56B2A] rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 bg-[#0A66C2] rounded-full flex items-center justify-center text-white font-bold">
                   {getOtherParticipant(selectedConversation)?.firstName?.[0]?.toUpperCase() ||
                     "?"}
                 </div>
@@ -385,13 +385,13 @@ const Chat = () => {
                   >
                     <div
                       className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${isOwn
-                          ? "bg-[#F56B2A] text-white"
-                          : "bg-white text-gray-900 border border-gray-200"
+                        ? "bg-[#0A66C2] text-white"
+                        : "bg-white text-gray-900 border border-gray-200"
                         }`}
                     >
                       <p className="text-sm break-words">{message.content}</p>
                       <p
-                        className={`text-xs mt-1 ${isOwn ? "text-orange-200" : "text-gray-500"
+                        className={`text-xs mt-1 ${isOwn ? "text-blue-200" : "text-gray-500"
                           }`}
                       >
                         {formatTime(message.createdAt)}
@@ -411,7 +411,7 @@ const Chat = () => {
                   value={messageInput}
                   onChange={(e) => {
                     setMessageInput(e.target.value);
-                  
+
                   }}
                   onKeyPress={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
@@ -420,12 +420,12 @@ const Chat = () => {
                     }
                   }}
                   placeholder="Tapez votre message..."
-                  className="flex-1 bg-gray-100 border-none rounded-full py-3 px-4 focus:ring-2 focus:ring-[#F56B2A] focus:bg-white transition-all outline-none text-sm"
+                  className="flex-1 bg-gray-100 border-none rounded-full py-3 px-4 focus:ring-2 focus:ring-[#0A66C2] focus:bg-white transition-all outline-none text-sm"
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim()}
-                  className="bg-[#F56B2A] hover:bg-[#E35B1D] disabled:bg-gray-300 text-white rounded-full p-3 transition-colors"
+                  className="bg-[#0A66C2] hover:bg-[#084B8A] disabled:bg-gray-300 text-white rounded-full p-3 transition-colors"
                 >
                   <Send size={20} />
                 </button>

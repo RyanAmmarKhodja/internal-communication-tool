@@ -150,10 +150,13 @@ const CreatePost = () => {
                                     <button
                                         key={key}
                                         type="button"
-                                        onClick={() => setPostType(key)}
+                                        onClick={() => {
+                                            setPostType(key);
+                                            if (key === 'OFFER') setCategory('COVOITURAGE');
+                                        }}
                                         className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all
                       ${postType === key
-                                                ? 'border-orange-500 bg-orange-50 text-orange-700 ring-2 ring-orange-200'
+                                                ? 'border-blue-500 bg-blue-50 text-blue-700 ring-2 ring-blue-200'
                                                 : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                                             }`}
                                     >
@@ -171,15 +174,19 @@ const CreatePost = () => {
                                 {CATEGORIES.map(({ key, label, icon: Icon, color }) => {
                                     const active = category === key;
                                     const c = COLOR_MAP[color];
+                                    const isDisabled = postType === 'OFFER' && key !== 'COVOITURAGE';
                                     return (
                                         <button
                                             key={key}
                                             type="button"
-                                            onClick={() => setCategory(key)}
+                                            onClick={() => !isDisabled && setCategory(key)}
+                                            disabled={isDisabled}
                                             className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm font-medium transition-all
                         ${active
                                                     ? `${c.border} ${c.bg} ${c.text} ring-2 ${c.ring}`
-                                                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                                                    : isDisabled
+                                                        ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50'
+                                                        : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                                                 }`}
                                         >
                                             <Icon className="w-4 h-4" />
@@ -188,6 +195,9 @@ const CreatePost = () => {
                                     );
                                 })}
                             </div>
+                            {postType === 'OFFER' && (
+                                <p className="text-xs text-blue-600 mt-2">En mode "Je propose", seule la catégorie Covoiturage est disponible.</p>
+                            )}
                         </div>
 
                         {/* ── 3. Title ── */}
@@ -200,7 +210,7 @@ const CreatePost = () => {
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="Ex : Câble HDMI à prêter, Covoiturage Paris → Lyon"
                                 required
-                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm"
                             />
                         </div>
 
@@ -308,7 +318,7 @@ const CreatePost = () => {
                                         onChange={(e) => setLocation(e.target.value)}
                                         placeholder="Campus, bâtiment, ville..."
                                         required
-                                        className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm"
+                                        className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm"
                                     />
                                 </div>
                             </div>
@@ -339,7 +349,7 @@ const CreatePost = () => {
                                         </button>
                                     </div>
                                 ) : (
-                                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-orange-400 hover:bg-orange-50/50 transition-all">
+                                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition-all">
                                         <ImagePlus className="w-8 h-8 text-gray-400 mb-2" />
                                         <span className="text-sm text-gray-500">Cliquez pour ajouter une image</span>
                                         <input
@@ -372,7 +382,7 @@ const CreatePost = () => {
                                 }
                                 rows={4}
                                 required
-                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm resize-none"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm resize-none"
                             />
                         </div>
 
@@ -387,7 +397,7 @@ const CreatePost = () => {
                         <button
                             type="submit"
                             disabled={submitting || !category}
-                            className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {submitting ? (
                                 <Loader2 className="w-5 h-5 animate-spin" />

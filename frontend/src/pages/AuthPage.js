@@ -70,7 +70,7 @@ const AuthPage = () => {
 
   // Style Constants (LeBonCoin Palette)
   const colors = {
-    primary: "#F56B2A", // LBC Orange
+    primary: "#0A66C2", // LinkedIn Blue
     text: "#1A1A1A", // Deep Gray/Black
     bg: "#F4F6F7", // Soft background gray
     link: "#4183D7", // LBC Blue for links
@@ -80,13 +80,13 @@ const AuthPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F6F7] px-4 font-sans">
       {/* 1. Header/Logo Area */}
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-black text-[#F56B2A] tracking-tighter mb-2">
-          CampusInsider
+        <h1 className="text-3xl font-black text-[#0A66C2] tracking-tighter mb-2">
+          PartaCov
         </h1>
         <p className="text-gray-600 text-sm">
           {isLogin
             ? "Bonjour ! Connectez-vous pour voir vos annonces."
-            : "Rejoignez la communauté CampusInsider."}
+            : "Rejoignez la communauté PartaCov."}
         </p>
       </div>
 
@@ -95,7 +95,7 @@ const AuthPage = () => {
         <h2 className="text-xl font-bold text-[#1A1A1A] mb-6">
           {isLogin ? "Se connecter" : "Créer un compte"}
         </h2>
-        
+
 
         {error && (
           <p className="text-white bg-red-500 p-4 rounded-2xl">
@@ -107,10 +107,10 @@ const AuthPage = () => {
           <p className="text-white bg-green-500 p-4 rounded-2xl">{success}</p>
         )}
 
-<div className="text-center mb-5">
-     {loading && <Loading />}
-</div>
-      
+        <div className="text-center mb-5">
+          {loading && <Loading />}
+        </div>
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Name Field (Register Only) */}
           {!isLogin && (
@@ -129,7 +129,7 @@ const AuthPage = () => {
                   onChange={handleChange}
                   type="text"
                   placeholder="Jean"
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F56B2A] focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent outline-none transition-all"
                 />
               </div>
               <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 my-1 ml-1">
@@ -146,7 +146,7 @@ const AuthPage = () => {
                   type="text"
                   name="LastName"
                   placeholder="Dupont "
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F56B2A] focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent outline-none transition-all"
                 />
               </div>
             </div>
@@ -165,7 +165,7 @@ const AuthPage = () => {
                 type="Email"
                 name="Email"
                 placeholder="nom@lsv77.fr"
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F56B2A] focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent outline-none transition-all"
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ const AuthPage = () => {
                 onChange={handleChange}
                 name="Password"
                 placeholder="••••••••"
-                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F56B2A] focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent outline-none transition-all"
               />
               <button
                 type="button"
@@ -202,14 +202,14 @@ const AuthPage = () => {
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
-              
+
             </div>
           </div>
-         
+
           {/* Submit Button */}
-          <button className="w-full bg-[#F56B2A] hover:bg-[#E35B1D] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2 group mt-6">
+          <button className="w-full bg-[#0A66C2] hover:bg-[#084B8A] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2 group mt-6">
             {isLogin ? "Me connecter" : "Continuer"}
-            
+
             <ArrowRight
               size={18}
               className="group-hover:translate-x-1 transition-transform"
@@ -223,7 +223,7 @@ const AuthPage = () => {
             {isLogin ? "Pas encore de compte ?" : "Vous avez déjà un compte ?"}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 font-bold text-[#1A1A1A] hover:text-[#F56B2A] transition-colors"
+              className="ml-2 font-bold text-[#1A1A1A] hover:text-[#0A66C2] transition-colors"
             >
               {isLogin ? "Créer un compte" : "Se connecter"}
             </button>

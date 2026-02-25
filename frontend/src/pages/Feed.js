@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   MapPin, Clock, Users, ArrowRight, ChevronLeft, ChevronRight,
   Wrench, Car, Search, Loader2, Film, Cpu, HelpCircle,
- Trash2
+  Trash2
 } from 'lucide-react';
 import api from '../api';
 import { useAuth } from '../AuthProvider';
@@ -113,7 +113,7 @@ function FeedCard({ post, currentUserId, onDeactivate }) {
 
       {/* Content */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="font-bold text-gray-900 text-sm mb-1.5 line-clamp-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="font-bold text-gray-900 text-sm mb-1.5 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {post.title}
         </h3>
 
@@ -171,7 +171,7 @@ function FeedCard({ post, currentUserId, onDeactivate }) {
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             )}
-            <span className="text-xs font-semibold text-orange-600 group-hover:text-orange-700 transition-colors">
+            <span className="text-xs font-semibold text-blue-600 group-hover:text-blue-700 transition-colors">
               Voir →
             </span>
           </div>
@@ -286,7 +286,7 @@ const Feed = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Rechercher une annonce…"
-              className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm bg-white"
+              className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm bg-white"
             />
           </div>
         </form>
@@ -301,7 +301,7 @@ const Feed = () => {
                 onClick={() => handleTypeChange(key)}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-150
                   ${active
-                    ? 'bg-orange-500 text-white shadow-sm'
+                    ? 'bg-blue-500 text-white shadow-sm'
                     : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                   }`}
               >
@@ -336,7 +336,7 @@ const Feed = () => {
         {/* ── Loading State ── */}
         {loading && (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+            <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
           </div>
         )}
 
@@ -346,7 +346,7 @@ const Feed = () => {
             <p className="text-red-500 mb-3">{error}</p>
             <button
               onClick={fetchFeed}
-              className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
               Réessayer
             </button>
