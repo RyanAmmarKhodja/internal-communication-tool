@@ -1,42 +1,40 @@
-backend/campus-insider/campus-insider/bin/
-backend/campus-insider/campus-insider/obj/
+## --- Global OS Files ---
+.DS_Store
+Thumbs.db
+.vs/
+.vscode/
+
+## --- Backend (ASP.NET) ---
+# Ignore build folders relative to root
+**/bin/
+**/obj/
+
+# Ignore SQLite databases
 *.db
 *.db-shm
 *.db-wal
-backend/campus-insider/campus-insider/appsettings.Development.json
-backend/campus-insider/campus-insider/appsettings.Production.json
+
+# Ignore secrets and environment-specific configs
+**/appsettings.Development.json
+**/appsettings.Production.json
+**/launchSettings.json
 *.user
-backend/campus-insider/.vs/
-backend/campus-insider/.vscode/
-backend/campus-insider/campus-insider/Properties/launchSettings.json
 
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-frontend/node_modules
+## --- Frontend (React/Node) ---
+**/node_modules/
+**/build/
+**/dist/
 frontend/.pnp
 frontend/.pnp.js
 
-# testing
-/coverage
-
-# production
-frontend/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-frontend/node_modules/
-frontend/build/
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.production.local
-frontend/.DS_Store
+# Environment Secrets
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
