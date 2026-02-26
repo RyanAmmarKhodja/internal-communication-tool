@@ -36,11 +36,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "7216";
-//builder.WebHost.ConfigureKestrel(options =>
-//{
-//    options.ListenAnyIP(int.Parse(port));
-//});
+var port = Environment.GetEnvironmentVariable("PORT") ?? "7216";
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(int.Parse(port));
+});
+
+
 
 builder.Services.AddAuthorization();
 
