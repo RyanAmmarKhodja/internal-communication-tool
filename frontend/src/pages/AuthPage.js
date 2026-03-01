@@ -181,7 +181,7 @@ const AuthPage = () => {
                   href="#"
                   className="text-xs font-semibold text-[#4183D7] hover:underline"
                 >
-                  Oublié ?
+                
                 </a>
               )}
             </div>

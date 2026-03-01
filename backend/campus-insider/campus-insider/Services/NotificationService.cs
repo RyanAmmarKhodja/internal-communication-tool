@@ -154,7 +154,7 @@ namespace campus_insider.Services
             await _context.SaveChangesAsync();
 
             // TODO: Trigger real-time push here (SignalR)
-            // await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", MapToDto(notification));
+            await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", MapToDto(notification));
             if (sendEmail)
             {
                 var user = await _context.Users.FindAsync(userId);

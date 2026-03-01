@@ -9,10 +9,12 @@ namespace campus_insider.Services
     public class ChatService
     {
         private readonly AppDbContext _context;
+        private readonly NotificationService _notificationService;
 
-        public ChatService(AppDbContext context)
+        public ChatService(AppDbContext context, NotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<ServiceResult<ChatConversationDto>> CreateOrGetDirectConversation(long user1Id, long user2Id)
@@ -76,10 +78,35 @@ namespace campus_insider.Services
             _context.ChatMessages.Add(message);
 
             // Update conversation last message time
-            var conversation = await _context.ChatConversations.FindAsync(conversationId);
+            //var conversation = await _context.ChatConversations.FindAsync(conversationId);
+
+            var conversation = await _context.ChatConversations
+                                            .Include(c => c.Participants)
+                                            .FirstOrDefaultAsync(c => c.Id == conversationId);
             conversation!.LastMessageAt = DateTime.UtcNow;
 
+            var sender = await _context.Users.FindAsync(senderId);
             await _context.SaveChangesAsync();
+
+            // Notify receivers (except sender)
+            try
+            {
+                await _notificationService.CreateNotification(
+                    conversation.Participants.First(p => p.UserId != senderId).UserId,
+                    "NEW_MESSAGE",
+                    "Nouveau message",
+                    $"Nouveau Message de {sender.FirstName}",
+                    sendEmail: false,
+                    actionUrl: $"conversations/direct/{message.ConversationId}",
+                    actionText: "Voir l'annonce"
+                );
+            }
+            catch
+            {
+                // Log error if needed, but allow the method to return the DTO
+            }
+
+
 
             // Reload with sender
             var sent = await _context.ChatMessages
@@ -220,7 +247,7 @@ namespace campus_insider.Services
             Id = message.Id,
             ConversationId = message.ConversationId,
             Content = message.Content,
-            Sender =  new UserResponseDto
+            Sender = new UserResponseDto
             {
                 Id = message.Sender.Id,
                 FirstName = message.Sender.FirstName,
